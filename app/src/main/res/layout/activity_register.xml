@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/transparent"
+    tools:context="com.guangzhou.weiwong.accountbook.mvp.view.RegisterActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="昵称"
+                android:textColor="@android:color/white"
+                android:textStyle="italic"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/et_user"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="邮箱"
+                android:textColor="@android:color/white"
+                android:textStyle="italic"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="密码"
+                android:textColor="@android:color/black"
+                android:textStyle="italic"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/et_pw"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="密码"
+                android:textColor="@android:color/white"
+                android:textStyle="italic"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/et_confirm_pw"
+                android:layout_width="200dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="注册"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:transitionName="@string/other_transition_name"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="0dp"
+        app:fabSize="normal"
+        app:pressedTranslationZ="8dp"
+        tools:targetApi="21"/>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:onClick="backActivity"
+        android:src="@drawable/ic_close_white"
+        android:visibility="invisible"/>
+</RelativeLayout>

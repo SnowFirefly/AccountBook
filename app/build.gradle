@@ -1,0 +1,68 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'//添加apt命令
+apply plugin: 'com.bugtags.library.plugin'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.guangzhou.weiwong.accountbook"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    apt 'com.google.dagger:dagger-compiler:2.0.2' //指定注解处理器
+    //dagger公用api
+    provided 'org.glassfish:javax.annotation:10.0-b28'  //添加android缺失的部分javax注解
+
+
+
+
+
+    compile project(':DatePicker')
+    compile project(':hellocharts-library')
+    compile 'com.android.support:support-v13:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:cardview-v7:23.0.0'
+    compile 'com.google.dagger:dagger:2.0.2'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okio:okio:1.6.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
+    compile 'com.bugtags.library:bugtags-lib:1.2.5'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
+}
+
+//自动上传插件
+bugtags {
+    appKey "ae096999d2c3b5bdae9befcaa3e4e4fd"  //这里是你的 appKey
+    appSecret "48f68adee3acaef1ee5ce26de61c2887"    //这里是你的 appSecret，管理员在设置页可以查看
+
+    trackingNetworkEnabled true //开启网络请求跟踪功能(企业版)
+}

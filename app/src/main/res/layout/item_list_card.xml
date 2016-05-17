@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:padding="8dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="horizontal"
+            android:paddingBottom="0dp"
+            android:weightSum="12">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:orientation="vertical"
+                android:background="@color/color1"
+                android:gravity="center_horizontal">
+                <com.bugtags.library.core.ui.rounded.CircleImageView
+                    android:id="@+id/ci_head"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/icon_head0"/>
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Six"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/tv_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="25.0"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:orientation="vertical"
+                android:background="@color/color2"
+                android:gravity="bottom|center_horizontal">
+                <com.bugtags.library.core.ui.rounded.CircleImageView
+                    android:id="@+id/ci_type"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/btg_icon_assistivebutton_submit_pressed"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@color/color3"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+                    <TextView
+                        android:id="@+id/tv_category"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="2"
+                        android:text="Category"
+                        android:textSize="20sp"/>
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="2.5"
+                        android:text="2016/05/01"
+                        android:textSize="20sp"/>
+                    <TextView
+                        android:id="@+id/tv_week"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="0.5"
+                        android:text="M"
+                        android:textSize="20sp"
+                        android:background="@color/color4"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:text="Detail"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <!--
+            <ImageView
+                android:id="@+id/item_iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nav_bar"/>
+
+            <TextView
+                android:id="@+id/item_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:text="Title goes here"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:text="少女时代"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                tools:ignore="HardcodedText"/>
+-->
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</FrameLayout>

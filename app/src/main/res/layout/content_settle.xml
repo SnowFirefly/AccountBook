@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.guangzhou.weiwong.accountbook.mvp.view.SettleActivity"
+    tools:showIn="@layout/activity_settle">
+  <!--
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+-->
+
+<!--使用paddingTop和clipToPadding以免被Toolbar遮挡。（亦可通过为RecyclerView添加Header实现。）-->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView
+            android:id="@+id/swipeRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@null"
+            android:scrollbars="vertical"
+            android:paddingTop="?attr/actionBarSize"
+            android:clipToPadding="false">
+        </com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

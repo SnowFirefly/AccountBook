@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.guangzhou.weiwong.accountbook.ui.PasterView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pv_paster"
+    android:layout_width="200dp"
+    android:layout_height="150dp"
+    android:layout_centerInParent="true"
+    android:background="@drawable/bg_paster"
+    android:gravity="center"
+    android:text="华文行楷"
+    android:textColor="@android:color/holo_red_light"
+    android:textSize="30sp" />

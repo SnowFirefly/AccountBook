@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.guangzhou.weiwong.accountbook.ui.PasterView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pv_sun"
+    android:layout_width="@dimen/view_paster_width"
+    android:layout_height="@dimen/view_paster_height"
+    android:padding="@dimen/view_paster_padding"
+    android:background="@drawable/green"
+    android:textColor="@android:color/black"
+    android:textSize="30sp" />
