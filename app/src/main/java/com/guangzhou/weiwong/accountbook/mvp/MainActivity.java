@@ -40,6 +40,7 @@ import com.guangzhou.weiwong.accountbook.mvp.presenter.MainPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.view.BaseMvpActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.ChartsActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.DailyActivity;
+import com.guangzhou.weiwong.accountbook.mvp.view.GroupActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
 import com.guangzhou.weiwong.accountbook.mvp.view.PasterActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.ProfileActivity;
@@ -268,8 +269,9 @@ public class MainActivity extends BaseMvpActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(this, ProfileActivity.class));
+        } else if (id == R.id.nav_gallery) {
+            startActivity(new Intent(this, GroupActivity.class));
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
