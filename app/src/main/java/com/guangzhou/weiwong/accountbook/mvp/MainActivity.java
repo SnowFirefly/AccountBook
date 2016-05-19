@@ -64,7 +64,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseMvpActivity
         implements NavigationView.OnNavigationItemSelectedListener, IView {
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
     private MainPresenter mainPresenter;
     private Typeface mTypeface;
 
@@ -89,6 +89,7 @@ public class MainActivity extends BaseMvpActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Log.d(TAG, "onCreate");
 //        pasterView.setTypeface(null, 0);
         mainPresenter = createPresenter();
 
@@ -122,7 +123,7 @@ public class MainActivity extends BaseMvpActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        Log.d(TAG, "onCreate1");
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -152,7 +153,9 @@ public class MainActivity extends BaseMvpActivity
         mHandler.sendEmptyMessageDelayed(5, 1800);
         mHandler.sendEmptyMessageDelayed(6, 2500);
         mHandler.sendEmptyMessageDelayed(7, 3000);
+        Log.d(TAG, "onCreate2");
         initView();
+
     }
 
     private Handler mHandler = new Handler(){

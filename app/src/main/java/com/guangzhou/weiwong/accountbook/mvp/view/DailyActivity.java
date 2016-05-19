@@ -132,9 +132,8 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
             }
-        }, 500);
+        }, 2000);
     }
 
     private void onAnimateCreate() {
@@ -178,6 +177,13 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
                         .setDuration(500).scaleX(1).scaleY(1).start();
             }
         });
+        // 延迟启动动画效果
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.startItemsAnim();
+            }
+        }, 2000);
     }
 
     private void initList(String str,int size) {
@@ -187,6 +193,7 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         }
         adapter.getList().addAll(DailyItem.getFakeItemsFirst());
         adapter.notifyDataSetChanged();
+
     }
 
     @Override

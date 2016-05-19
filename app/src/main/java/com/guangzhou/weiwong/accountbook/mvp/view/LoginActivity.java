@@ -1,5 +1,6 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +27,8 @@ import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.ILoginPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.LoginPresenter;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 import javax.inject.Inject;
 
@@ -37,6 +41,9 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     @Bind(R.id.et_user) EditText mEtUser;
     @Bind(R.id.et_pw) EditText mEtPw;
     @Bind(R.id.ll_login) LinearLayout mLlLogin;
+
+    @Bind(R.id.tv_shimmer) ShimmerTextView mShimmerTv;
+    private Shimmer mShimmer;
 
     @Inject
     NetworkApiService networkApiService;
@@ -51,16 +58,47 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         networkApiService = new NetworkApiService();
         loginPresenter = createPresenter();
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+
+        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+        mFab.startAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mFab.startAnimation(animation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+//        animation.setRepeatMode(Animation.REVERSE);
+
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                startOtherActivity(view);
+//                startOtherActivity(view);
+                mFab.startAnimation(animation);
             }
         });
         ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         int heapSize = manager.getMemoryClass();
         Log.i(TAG, "heapSize: " + heapSize + "MB");
+
+        mShimmer = new Shimmer();
+        mShimmer.start(mShimmerTv);
+        /*mShimmer.setRepeatCount(0)
+                .setDuration(500)
+                .setStartDelay(300)
+                .setDirection(Shimmer.ANIMATION_DIRECTION_RTL)
+                .setAnimatorListener(new Animator.AnimatorListener() {
+                });*/
     }
 
     @Override
