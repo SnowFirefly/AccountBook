@@ -6,9 +6,15 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +23,12 @@ import android.view.ViewStub;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
@@ -32,6 +42,7 @@ import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.ILoginPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.LoginPresenter;
+import com.guangzhou.weiwong.accountbook.utils.BlurUtil;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
@@ -104,6 +115,15 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                 .setDirection(Shimmer.ANIMATION_DIRECTION_RTL)
                 .setAnimatorListener(new Animator.AnimatorListener() {
                 });*/
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_login);
+        Bitmap newBitmap = BlurUtil.fastblur(this, bitmap, 12);
+        RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
+        mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
+
+        animate();
     }
 
     @Override
@@ -269,5 +289,38 @@ public class LoginActivity extends BaseMvpActivity implements IView{
             }
         });
         widthAnimation.start();
+    }
+
+    private final int STARTUP_DELAY = 300, ANIM_ITEM_DURATION = 1000, ITEM_DELAY = 300;
+    @Bind(R.id.iv_smile) ImageView mIvSmile;
+    private void animate(){
+        ViewCompat.animate(mIvSmile)
+                .translationY(-300)
+                .setStartDelay(STARTUP_DELAY)
+                .setDuration(ANIM_ITEM_DURATION)
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
+        for (int i = 0; i < mLlLogin.getChildCount(); i++) {
+            View v = mLlLogin.getChildAt(i);
+            ViewPropertyAnimatorCompat viewAnimator;
+
+            // TextView控件, Button是TextView的子类
+
+            // 从消失到显示
+            if ((v instanceof LinearLayout)) {
+                viewAnimator = ViewCompat.animate(v)
+                        .translationY(50).alpha(1)
+                        .setStartDelay((ITEM_DELAY * i) + 500)
+                        .setDuration(1000);
+                viewAnimator.setInterpolator(new DecelerateInterpolator()).start();
+            } else if (v instanceof Button){ // Button控件, 从缩小到扩大
+                viewAnimator = ViewCompat.animate(v)
+                        .scaleY(1).scaleX(1)
+                        .setStartDelay((ITEM_DELAY * i) + 500)
+                        .setDuration(500);
+                viewAnimator.setInterpolator(new DecelerateInterpolator()).start();
+            }
+
+        }
     }
 }
