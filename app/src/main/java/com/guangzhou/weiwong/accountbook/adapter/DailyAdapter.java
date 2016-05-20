@@ -30,13 +30,8 @@ public class DailyAdapter extends SwipeRecyclerViewAdapter{
         return mItems;
     }
 
-    private List<ItemViewHolder> mHolders;   // test anim
-    private static Animation mAnimation;
-
     public DailyAdapter() {
         mItems = new ArrayList<DailyItem>();
-        mHolders = new ArrayList<>();
-
     }
 
     @Override
@@ -51,9 +46,6 @@ public class DailyAdapter extends SwipeRecyclerViewAdapter{
                     .inflate(R.layout.item_list_card, null);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
-//            view.startAnimation(AnimationUtils.loadAnimation(parent.getContext(), R.anim.slide_in_top));
-//            view.setAnimation(AnimationUtils.loadAnimation(parent.getContext(), R.anim.slide_in_top));
-            mAnimation = AnimationUtils.loadAnimation(parent.getContext(), R.anim.shake);
             return new ItemViewHolder(view);
         }
         return null;
@@ -63,19 +55,7 @@ public class DailyAdapter extends SwipeRecyclerViewAdapter{
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ((ItemViewHolder) holder).bindTo(mItems.get(position));
-
-            mHolders.add((ItemViewHolder) holder);// test anim
         }
-    }
-
-    // test anim
-    public void startItemsAnim(){
-        for (ItemViewHolder holder: mHolders){
-            holder.startViewAnim();
-        }
-//        for (int i = 0; i < 1; i++) {
-//            mHolders.get(i).startViewAnim();
-//        }
     }
 
     public void setItems(List<DailyItem> items) {
@@ -97,19 +77,11 @@ public class DailyAdapter extends SwipeRecyclerViewAdapter{
 
         private Context mContext;
 
-        private View mView; // test anim
-
         public ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             mContext = view.getContext();
 
-            mView = view;   // test anim
-        }
-
-        // test anim
-        public void startViewAnim(){
-            mView.startAnimation(mAnimation);
         }
 
         public void bindTo(DailyItem dailyItem){

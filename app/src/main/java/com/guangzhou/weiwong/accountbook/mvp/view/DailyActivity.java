@@ -181,7 +181,7 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.startItemsAnim();
+//                adapter.startItemsAnim();
             }
         }, 2000);
     }

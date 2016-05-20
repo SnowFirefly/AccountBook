@@ -1,6 +1,7 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -13,12 +14,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.dd.CircularProgressButton;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
 import com.guangzhou.weiwong.accountbook.mvp.model.NetworkApiService;
@@ -84,7 +89,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
             public void onClick(View view) {
 //                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
 //                startOtherActivity(view);
-                mFab.startAnimation(animation);
+                dialogShow(mEtUser.getText().toString());
             }
         });
         ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
@@ -151,5 +156,118 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         } else {
             startActivity(new Intent(this, RegisterActivity.class));
         }
+    }
+
+    private Effectstype effect;
+    // test dialog
+    private void dialogShow(String stype){
+        switch (stype) {
+            case "1": effect=Effectstype.Fadein;break;
+            case "2": effect=Effectstype.Slideright;break;
+            case "3": effect=Effectstype.Slideleft;break;
+            case "4": effect=Effectstype.Slidetop;break;
+            case "5": effect=Effectstype.SlideBottom;break;
+            case "6": effect=Effectstype.Newspager;break;
+            case "7": effect=Effectstype.Fall;break;
+            case "8": effect=Effectstype.Sidefill;break;
+            case "9": effect=Effectstype.Fliph;break;
+            case "10": effect=Effectstype.Flipv;break;
+            case "11": effect=Effectstype.RotateBottom;break;
+            case "12": effect=Effectstype.RotateLeft;break;
+            case "13": effect=Effectstype.Slit;break;
+            case "14": effect=Effectstype.Shake;break;
+            default:  effect=Effectstype.Fadein; break;
+        }
+
+        NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        dialogBuilder
+                .withTitle("Modal Dialog")                                  //.withTitle(null)  no title
+                .withTitleColor("#FFFFFF")                                  //def
+                .withDividerColor("#11000000")                              //def
+                .withMessage("This is a modal Dialog.")                     //.withMessage(null)  no Msg
+                .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+                .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)                               //def
+                .withIcon(getResources().getDrawable(R.drawable.ic_launcher))
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .withDuration(700)                                          //def
+                .withEffect(effect)                                         //def Effectstype.Slidetop
+                .withButton1Text("OK")                                      //def gone
+                .withButton2Text("Cancel")                                  //def gone
+                .setCustomView(R.layout.custom_view, this)         //.setCustomView(View or ResId,context)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setButton2Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "i'm btn2", Toast.LENGTH_SHORT).show();
+                        showProgressBtn();
+                    }
+                })
+                .show();
+    }
+
+    private void showProgressBtn(){
+        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.cpb1);
+        circularButton1.setIndeterminateProgressMode(true);
+        circularButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (circularButton1.getProgress() == 0) {
+                    circularButton1.setProgress(50);
+                } else if (circularButton1.getProgress() == -1) {   // 100
+                    circularButton1.setProgress(0);
+                } else {
+                    circularButton1.setProgress(-1);        // 100
+                }
+
+                /*if (circularButton1.getProgress() == 0) {
+                    simulateErrorProgress(circularButton1);
+                } else {
+                    circularButton1.setProgress(0);
+                }*/
+
+                /*if (circularButton1.getProgress() == 0) {
+                    circularButton1.setProgress(100);   // -1
+                } else {
+                    circularButton1.setProgress(0);
+                }*/
+
+            }
+        });
+    }
+
+    private void simulateSuccessProgress(final CircularProgressButton button) {
+        ValueAnimator widthAnimation = ValueAnimator.ofInt(1, 100);
+        widthAnimation.setDuration(1500);
+        widthAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        widthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                button.setProgress(value);
+            }
+        });
+        widthAnimation.start();
+    }
+
+    private void simulateErrorProgress(final CircularProgressButton button) {
+        ValueAnimator widthAnimation = ValueAnimator.ofInt(1, 99);
+        widthAnimation.setDuration(1500);
+        widthAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        widthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                button.setProgress(value);
+                if (value == 99) {
+                    button.setProgress(-1);
+                }
+            }
+        });
+        widthAnimation.start();
     }
 }
