@@ -123,6 +123,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
         mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
 
+        showProgressBtn();
         animate();
     }
 
@@ -209,7 +210,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                 .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)                               //def
                 .withIcon(getResources().getDrawable(R.drawable.ic_launcher))
                 .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                .withDuration(700)                                          //def
+                .withDuration(400)                                          //def 700
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("OK")                                      //def gone
                 .withButton2Text("Cancel")                                  //def gone
@@ -224,24 +225,29 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(v.getContext(), "i'm btn2", Toast.LENGTH_SHORT).show();
-                        showProgressBtn();
                     }
                 })
                 .show();
     }
 
     private void showProgressBtn(){
-        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.cpb1);
+        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.cpb_login);
         circularButton1.setIndeterminateProgressMode(true);
         circularButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (circularButton1.getProgress() == 0) {
                     circularButton1.setProgress(50);
-                } else if (circularButton1.getProgress() == -1) {   // 100
+                } else if (circularButton1.getProgress() == 100) {   // -1
                     circularButton1.setProgress(0);
                 } else {
-                    circularButton1.setProgress(-1);        // 100
+                    circularButton1.setProgress(100);        // -1
+                    circularButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            login(v);
+                        }
+                    });
                 }
 
                 /*if (circularButton1.getProgress() == 0) {
@@ -293,6 +299,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 
     private final int STARTUP_DELAY = 300, ANIM_ITEM_DURATION = 1000, ITEM_DELAY = 300;
     @Bind(R.id.iv_smile) ImageView mIvSmile;
+    @Bind(R.id.btn_register) Button mBtnRegister;
     private void animate(){
         ViewCompat.animate(mIvSmile)
                 .translationY(-300)
@@ -313,14 +320,50 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                         .setStartDelay((ITEM_DELAY * i) + 500)
                         .setDuration(1000);
                 viewAnimator.setInterpolator(new DecelerateInterpolator()).start();
-            } else if (v instanceof Button){ // Button控件, 从缩小到扩大
+            } else if (v instanceof CircularProgressButton){ // Button控件, 从缩小到扩大
+                viewAnimator = ViewCompat.animate(v)
+                        .scaleY(1).scaleX(1)
+                        .setStartDelay((ITEM_DELAY * i) + 500)
+                        .setDuration(500);
+                viewAnimator.setInterpolator(new DecelerateInterpolator()).start();
+
+                final Animation strickenAnim = AnimationUtils.loadAnimation(this, R.anim.stricken);
+                strickenAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mBtnRegister.setVisibility(View.INVISIBLE);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                strickenAnim.setFillEnabled(true);
+                strickenAnim.setFillAfter(true);
+
+                Animation animation = AnimationUtils.loadAnimation(this, R.anim.strike);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mBtnRegister.startAnimation(strickenAnim);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                animation.setStartOffset((ITEM_DELAY * i) + 500);
+                animation.setFillEnabled(true);
+                animation.setFillAfter(true);
+                v.setAnimation(animation);
+                animation.start();
+            } else if (v instanceof Button) { // Button控件, 从缩小到扩大
                 viewAnimator = ViewCompat.animate(v)
                         .scaleY(1).scaleX(1)
                         .setStartDelay((ITEM_DELAY * i) + 500)
                         .setDuration(500);
                 viewAnimator.setInterpolator(new DecelerateInterpolator()).start();
             }
-
         }
     }
 }
