@@ -2,21 +2,36 @@ package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.adapter.MemberAdapter;
+import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
+import com.guangzhou.weiwong.accountbook.mvp.model.data.MemberItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GroupActivity extends AppCompatActivity {
     @Bind(R.id.ll_group) LinearLayout mLlRoot;
@@ -38,7 +53,7 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardView = new CardView(this);
+        /*CardView cardView = new CardView(this);
         TextView textView = new TextView(this);
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         textView.setText("text");
@@ -52,7 +67,94 @@ public class GroupActivity extends AppCompatActivity {
         FrameLayout frameLayout1 = (FrameLayout) getLayoutInflater().inflate(R.layout.item_list_card_settle, null);
         frameLayout1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mLlRoot.addView(frameLayout);
-        mLlRoot.addView(frameLayout1);
+        mLlRoot.addView(frameLayout1);*/
+
+        createGroup();
     }
 
+    CircleImageView mCiDelete;
+    CircleImageView mCiAdd;
+    MemberAdapter memberAdapter;
+    private void createGroup(){
+//        RelativeLayout mRlGroup = (RelativeLayout) getLayoutInflater().inflate(R.layout.item_one_group, null);
+        CardView mCvGroup = (CardView) getLayoutInflater().inflate(R.layout.item_one_group, null);
+        RelativeLayout mRlGroup = (RelativeLayout) mCvGroup.findViewById(R.id.rl_container);
+        RecyclerView mRvGroup = (RecyclerView) mCvGroup.findViewById(R.id.rv_group);
+        mCiDelete = (CircleImageView) mCvGroup.findViewById(R.id.ci_delete);
+        mCiAdd = (CircleImageView) mCvGroup.findViewById(R.id.ci_add);
+
+        mRvGroup.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
+        mRvGroup.setHasFixedSize(true);
+        mRvGroup.setItemAnimator(ItemAnimatorFactory.slidein());
+        memberAdapter = new MemberAdapter();
+        memberAdapter.setItems(MemberItem.getFakeItems());
+        mRvGroup.setAdapter(memberAdapter);
+        mLlRoot.addView(mCvGroup);
+
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                memberAdapter.startItemAnim();
+            }
+        }, 1000);
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                memberAdapter.cancelItemAnim();
+            }
+        }, 20000);
+    }
+
+    public void onDeleteMember(View view){
+        hideAddAndDelete();
+        memberAdapter.startItemAnim();
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showAddAndDelete();
+                memberAdapter.cancelItemAnim();
+            }
+        }, 8000);
+    }
+
+    public void onAddMember(View view){
+        hideAddAndDelete();
+        memberAdapter.startItemAnim();
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showAddAndDelete();
+                memberAdapter.cancelItemAnim();
+            }
+        }, 8000);
+    }
+
+    private void hideAddAndDelete(){
+        ViewCompat.animate(mCiAdd)
+                .translationX(150)
+                .rotation(360)
+                .setDuration(500)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
+        ViewCompat.animate(mCiDelete)
+                .translationX(-150)
+                .rotation(-360)
+                .setDuration(500)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
+    }
+    private void showAddAndDelete(){
+        ViewCompat.animate(mCiAdd)
+                .translationX(0)
+                .rotation(-360)
+                .setDuration(500)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
+        ViewCompat.animate(mCiDelete)
+                .translationX(0)
+                .rotation(360)
+                .setDuration(500)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
+    }
 }

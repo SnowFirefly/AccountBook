@@ -2,6 +2,7 @@ package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
@@ -18,8 +20,11 @@ import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -101,6 +107,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 //                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
 //                startOtherActivity(view);
                 dialogShow(mEtUser.getText().toString());
+
             }
         });
         ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
@@ -122,7 +129,8 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         Bitmap newBitmap = BlurUtil.fastblur(this, bitmap, 12);
         RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
         mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
-
+//        CoordinatorLayout mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.rl_login_root);
+//        mCoordinatorLayout.setBackground(new BitmapDrawable(newBitmap));
         showProgressBtn();
         animate();
     }
@@ -366,4 +374,5 @@ public class LoginActivity extends BaseMvpActivity implements IView{
             }
         }
     }
+
 }

@@ -29,7 +29,8 @@ dependencies {
     //dagger公用api
     provided 'org.glassfish:javax.annotation:10.0-b28'  //添加android缺失的部分javax注解
 
-
+    // 可定制的圆形浮动菜单
+    compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     // 对话框
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'

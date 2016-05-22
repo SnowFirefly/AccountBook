@@ -6,12 +6,10 @@
     android:background="@drawable/bg_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     android:fitsSystemWindows="true"
     tools:context="com.guangzhou.weiwong.accountbook.mvp.view.LoginActivity">
+
 
     <com.romainpiel.shimmer.ShimmerTextView
         android:id="@+id/tv_shimmer"
@@ -158,4 +156,5 @@
         android:layout_alignParentBottom="true"
         android:transitionName="@string/other_transition_name"
         tools:targetApi="lollipop"/>
+
 </RelativeLayout>
