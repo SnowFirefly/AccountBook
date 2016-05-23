@@ -20,8 +20,12 @@
             android:title="分组管理" />
     </group>
 
-    <item android:title="账本">
+    <item android:title="账本"
+        android:id="@+id/item_note">
         <menu>
+            <group
+                android:id="@+id/group1"
+                android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
@@ -30,6 +34,7 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="分组账本" />
+            </group>
         </menu>
     </item>
 

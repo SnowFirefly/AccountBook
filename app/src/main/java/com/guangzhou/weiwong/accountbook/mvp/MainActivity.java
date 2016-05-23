@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -123,6 +124,27 @@ public class MainActivity extends BaseMvpActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.getItem(4);
+        Log.i(TAG, "menuItem1.getTitle():" + menuItem.getTitle());
+        if (menuItem.hasSubMenu()) {
+            Menu subMenu = menuItem.getSubMenu();
+            subMenu.add(R.id.group1, 0x666, 0, "Group 0");
+            subMenu.add(R.id.group1, 0x667, 0, "Group 1");
+            subMenu.add(R.id.group1, 0x668, 0, "Group 2");
+            MenuItem menuItem1 = subMenu.getItem(2);
+            menuItem1.setIcon(getResources().getDrawable(R.drawable.btg_btn_arrow));
+        }
+
+        View view = navigationView.getHeaderView(0);
+        CircleImageView mCiHead = (CircleImageView) view.findViewById(R.id.ci_head);
+        mCiHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -248,6 +270,8 @@ public class MainActivity extends BaseMvpActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -269,6 +293,9 @@ public class MainActivity extends BaseMvpActivity
             startActivity(new Intent(this, ChartsActivity.class));
         }
 
+        else if (id == 0x666) {
+            item.setChecked(true);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
