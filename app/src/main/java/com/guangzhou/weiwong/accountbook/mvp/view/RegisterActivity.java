@@ -1,6 +1,7 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.annotation.TargetApi;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RegisterActivity extends BaseMvpActivity implements IView{
+    private final String TAG = "RegisterActivity";
     private IRegisterPresenter iRegisterPresenter;
 
     @Bind(R.id.fab_circle)
@@ -77,7 +80,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
+        Log.d(TAG, "onCreate");
         iRegisterPresenter = createPresenter();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -86,10 +89,12 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
         } else {
             initViews();
         }
+        Log.d(TAG, "onCreate done");
     }
 
     // 初始化视图
     private void initViews() {
+        Log.d(TAG, "initViews");
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -101,6 +106,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
                 mIvClose.setVisibility(View.VISIBLE);
 
                 mFabCircle.setVisibility(View.INVISIBLE);
+                Log.d(TAG, "Visible");
             }
         });
         /*new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -116,11 +122,11 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
     private void setupEnterAnimation() {
         Transition transition = TransitionInflater.from(this)
                 .inflateTransition(R.transition.arc_motion);
-        getWindow().setSharedElementEnterTransition(transition);
+
         transition.addListener(new Transition.TransitionListener() {
             @Override
             public void onTransitionStart(Transition transition) {
-
+                Log.d(TAG, "onTransitionStart");
             }
 
             @Override
@@ -131,19 +137,21 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
 
             @Override
             public void onTransitionCancel(Transition transition) {
-
+                Log.d(TAG, "onTransitionCancel");
             }
 
             @Override
             public void onTransitionPause(Transition transition) {
-
+                Log.d(TAG, "onTransitionPause");
             }
 
             @Override
             public void onTransitionResume(Transition transition) {
-
+                Log.d(TAG, "onTransitionResume");
             }
         });
+        getWindow().setSharedElementEnterTransition(transition);
+
     }
 
     // 退出动画
@@ -157,6 +165,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
     // 动画展示
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void animateRevealShow() {
+        Log.d(TAG, "animateRevealShow");
         AnimUtil.animateRevealShow(
                 this, mRlContainer,
                 mFabCircle.getWidth() / 2, R.color.colorAccent,

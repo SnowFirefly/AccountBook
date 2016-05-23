@@ -82,7 +82,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
         final Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
-        mFab.startAnimation(animation);
+//        mFab.startAnimation(animation);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -91,7 +91,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mFab.startAnimation(animation);
+//                mFab.startAnimation(animation);
             }
 
             @Override
@@ -105,8 +105,8 @@ public class LoginActivity extends BaseMvpActivity implements IView{
             @Override
             public void onClick(View view) {
 //                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-//                startOtherActivity(view);
-                dialogShow(mEtUser.getText().toString());
+                startOtherActivity(view);
+//                dialogShow(mEtUser.getText().toString());
 
             }
         });
@@ -133,6 +133,8 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 //        mCoordinatorLayout.setBackground(new BitmapDrawable(newBitmap));
         showProgressBtn();
         animate();
+
+        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_login));
     }
 
     @Override
