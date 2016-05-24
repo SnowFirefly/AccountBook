@@ -7,10 +7,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ public class PasterActivity extends BaseMvpActivity {
     private final String TAG = getClass().getName();
     private boolean sEditable;
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.pev_note) PasterEditView mPevNote;
     @Bind(R.id.btn_edit) Button mBtnEdit;
 
@@ -44,6 +47,9 @@ public class PasterActivity extends BaseMvpActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paster);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mPevNote.setTypeface(Typeface.createFromAsset(this.getAssets(), "fangzheng_jinglei.ttf"));
     }
 
@@ -135,5 +141,14 @@ public class PasterActivity extends BaseMvpActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

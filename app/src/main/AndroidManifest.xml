@@ -24,7 +24,10 @@
         <activity
             android:name=".mvp.view.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".mvp.view.PasterActivity" />
+        <activity
+            android:name=".mvp.view.PasterActivity"
+            android:label="@string/title_activity_paster"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".mvp.view.ChartsActivity"
             android:label="@string/title_activity_charts"
@@ -46,7 +49,7 @@
             android:label="@string/title_activity_settle"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".mvp.view.SplashActivity"
-            android:label="@string/title_activity_settle"
+            android:label="@string/title_activity_splash"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

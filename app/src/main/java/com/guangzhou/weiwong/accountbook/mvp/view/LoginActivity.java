@@ -134,7 +134,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         showProgressBtn();
         animate();
 
-        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_login1));
+        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
     }
 
     @Override

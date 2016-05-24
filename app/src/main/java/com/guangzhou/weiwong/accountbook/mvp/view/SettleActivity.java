@@ -15,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -56,6 +57,7 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         setContentView(R.layout.activity_settle);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
 
@@ -217,4 +219,12 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         showToolbar();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

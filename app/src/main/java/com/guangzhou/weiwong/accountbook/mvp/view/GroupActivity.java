@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -42,6 +43,7 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -156,5 +158,14 @@ public class GroupActivity extends AppCompatActivity {
                 .setDuration(500)
                 .setInterpolator(new AccelerateInterpolator())
                 .start();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

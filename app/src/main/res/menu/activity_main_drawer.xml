@@ -3,20 +3,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_daily"
+            android:icon="@drawable/ic_event_note_grey600_24dp"
             android:title="每日一记" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_charts"
+            android:icon="@drawable/ic_insert_chart_grey600_24dp"
             android:title="统计图" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_settle"
+            android:icon="@drawable/ic_event_available_grey600_24dp"
             android:title="结算" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:id="@+id/nav_groups_manage"
+            android:icon="@drawable/ic_group_add_grey600_24dp"
             android:title="分组管理" />
     </group>
 
@@ -27,12 +27,12 @@
                 android:id="@+id/group1"
                 android:checkableBehavior="single">
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:id="@+id/nav_private"
+                android:icon="@drawable/ic_person_grey600_24dp"
                 android:title="个人账本" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:id="@+id/nav_groups"
+                android:icon="@drawable/ic_group_grey600_24dp"
                 android:title="分组账本" />
             </group>
         </menu>

@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -97,6 +98,7 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         setContentView(R.layout.activity_daily);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -214,4 +216,12 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         return null;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

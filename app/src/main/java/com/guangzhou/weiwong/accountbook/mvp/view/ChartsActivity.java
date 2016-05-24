@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -32,6 +33,7 @@ public class ChartsActivity extends BaseMvpActivity {
         ButterKnife.bind(this);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -118,5 +120,14 @@ public class ChartsActivity extends BaseMvpActivity {
                 actionMenu.close(true);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

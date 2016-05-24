@@ -116,7 +116,7 @@ public class MainActivity extends BaseMvpActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -133,8 +133,8 @@ public class MainActivity extends BaseMvpActivity
             subMenu.add(R.id.group1, 0x666, 0, "Group 0");
             subMenu.add(R.id.group1, 0x667, 0, "Group 1");
             subMenu.add(R.id.group1, 0x668, 0, "Group 2");
-            MenuItem menuItem1 = subMenu.getItem(2);
-            menuItem1.setIcon(getResources().getDrawable(R.drawable.btg_btn_arrow));
+//            MenuItem menuItem1 = subMenu.getItem(2);
+//            menuItem1.setIcon(getResources().getDrawable(R.drawable.btg_btn_arrow));
         }
 
         View view = navigationView.getHeaderView(0);
@@ -142,7 +142,9 @@ public class MainActivity extends BaseMvpActivity
         mCiHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
             }
         });
 
@@ -278,19 +280,22 @@ public class MainActivity extends BaseMvpActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            startActivity(new Intent(this, ProfileActivity.class));
-        } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(this, GroupActivity.class));
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-            startActivity(new Intent(this, SettleActivity.class));
-        } else if (id == R.id.nav_share) {
+        if (id == R.id.nav_daily) {
             startActivity(new Intent(this, DailyActivity.class));
-        } else if (id == R.id.nav_send) {
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else if (id == R.id.nav_charts) {
             startActivity(new Intent(this, ChartsActivity.class));
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else if (id == R.id.nav_settle) {
+            startActivity(new Intent(this, SettleActivity.class));
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else if (id == R.id.nav_groups_manage) {
+            startActivity(new Intent(this, GroupActivity.class));
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else if (id == R.id.nav_private) {
+
+        } else if (id == R.id.nav_groups) {
+
         }
 
         else if (id == 0x666) {

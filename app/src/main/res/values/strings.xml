@@ -15,4 +15,6 @@
     <string name="title_activity_profile"></string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="title_activity_settle">SettleActivity</string>
+    <string name="title_activity_paster">PasterActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>
