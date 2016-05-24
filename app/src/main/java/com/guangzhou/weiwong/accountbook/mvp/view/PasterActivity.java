@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -51,6 +53,15 @@ public class PasterActivity extends BaseMvpActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPevNote.setTypeface(Typeface.createFromAsset(this.getAssets(), "fangzheng_jinglei.ttf"));
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPevNote.setEnabled(sEditable);
+                sEditable = !sEditable;
+            }
+        });
     }
 
     @Override

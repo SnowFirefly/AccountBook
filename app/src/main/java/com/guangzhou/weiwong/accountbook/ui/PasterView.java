@@ -58,9 +58,12 @@ public class PasterView extends TextView{
         mPadR = mWidth / 4;
         Log.d(TAG, "mHeight = " + mHeight + ", mWidth = " + mWidth + ", mPadT = " + mPadT + ", mPadL = " + mPadL);
         Log.d(TAG, "hashCode: " + hashCode());
+        String[] texts = content.split("\n");
         if (sNeedDraw) {
             init();
-            canvas.drawText(content, mPadL, mPadT, mPaint);
+            for (int i=0; i<texts.length; i++) {
+                canvas.drawText(texts[i], mPadL, mPadT + i*50, mPaint);
+            }
         } else {
             sNeedDraw = true;
         }

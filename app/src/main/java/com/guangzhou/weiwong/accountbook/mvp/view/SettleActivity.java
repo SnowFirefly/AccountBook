@@ -165,10 +165,16 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
             }
         });
         valueAnimator.start();
+//        ViewCompat.animate(mToolbar)
+//                .alpha(0)
+//                .setDuration(500)
+//                .setInterpolator(new DecelerateInterpolator())
+//                .start();
         valueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                mToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 mSettleAdapter.setItems(SettleItem.getFakeItemsFirst());
                 ViewCompat.animate(mFab).setStartDelay(500)
                         .setDuration(500).scaleX(1).scaleY(1).start();

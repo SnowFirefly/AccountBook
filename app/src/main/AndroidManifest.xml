@@ -18,12 +18,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.view.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.FullScreen">
 
         </activity>
         <activity
             android:name=".mvp.view.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".mvp.view.PasterActivity"
             android:label="@string/title_activity_paster"

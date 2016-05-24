@@ -75,30 +75,26 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.i(TAG, "onCreate: " + "before bind");
         ButterKnife.bind(this);
+        Log.i(TAG, "onCreate: " + "after bind");
 //        DaggerActivityComponent.builder().build().injectActivity(this);
         networkApiService = new NetworkApiService();
         loginPresenter = createPresenter();
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
-        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+//        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
 //        mFab.startAnimation(animation);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-//                mFab.startAnimation(animation);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+//        animation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {}
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+////                mFab.startAnimation(animation);
+//            }
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {}
+//        });
 //        animation.setRepeatMode(Animation.REVERSE);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -110,12 +106,13 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 
             }
         });
+        Log.i(TAG, "onCreate: " + "before get ActivityManager");
         ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         int heapSize = manager.getMemoryClass();
         Log.i(TAG, "heapSize: " + heapSize + "MB");
 
-        mShimmer = new Shimmer();
-        mShimmer.start(mShimmerTv);
+//        mShimmer = new Shimmer();
+//        mShimmer.start(mShimmerTv);
         /*mShimmer.setRepeatCount(0)
                 .setDuration(500)
                 .setStartDelay(300)
@@ -123,18 +120,18 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                 .setAnimatorListener(new Animator.AnimatorListener() {
                 });*/
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_login);
-        Bitmap newBitmap = BlurUtil.fastblur(this, bitmap, 12);
-        RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
-        mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
-//        CoordinatorLayout mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.rl_login_root);
-//        mCoordinatorLayout.setBackground(new BitmapDrawable(newBitmap));
+
+//        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
+        Log.i(TAG, "onCreate: " + "end");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: " + "before show and animate");
         showProgressBtn();
         animate();
-
-        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
+        Log.i(TAG, "onStart: " + "after show and animate");
     }
 
     @Override
@@ -311,6 +308,13 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     @Bind(R.id.iv_smile) ImageView mIvSmile;
     @Bind(R.id.btn_register) Button mBtnRegister;
     private void animate(){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_login);
+        Bitmap newBitmap = BlurUtil.fastblur(this, bitmap, 12);
+        RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
+        mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
+
         ViewCompat.animate(mIvSmile)
                 .translationY(-300)
                 .setStartDelay(STARTUP_DELAY)
@@ -344,6 +348,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         mBtnRegister.setVisibility(View.INVISIBLE);
+                        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {}

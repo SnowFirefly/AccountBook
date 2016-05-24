@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.guangzhou.weiwong.accountbook.R;
 import com.romainpiel.shimmer.Shimmer;
@@ -23,10 +24,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 shimmer.cancel();
-                finish();
 //                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                finish();
+                Log.i("SplashActivity", "startActivity");
             }
         }, 2000);
     }

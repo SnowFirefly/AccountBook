@@ -19,6 +19,7 @@
         android:text="SpiderMan"
         android:textColor="#444"
         android:textSize="50sp"
+        android:visibility="gone"
         app:reflectionColor="#f00"/>
 
     <LinearLayout
@@ -39,6 +40,7 @@
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:alpha="0"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
@@ -46,10 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_email_grey600_36dp"
-                android:gravity="center"
-                android:textStyle="italic"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"/>
+                />
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" >
@@ -57,7 +56,7 @@
                 android:id="@+id/et_user"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:hint="account"/>
+                android:hint="邮箱"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
@@ -67,6 +66,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:alpha="0"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
@@ -85,7 +85,7 @@
                 android:id="@+id/et_pw"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:hint="password"
+                android:hint="密码"
                 android:inputType="textPassword"/>
             </android.support.design.widget.TextInputLayout>
             <ImageView
@@ -102,9 +102,11 @@
             android:scaleX="0"
             android:scaleY="0"
             android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
             app:cpb_textComplete="Complete"
             app:cpb_textError="Error"
-            app:cpb_textIdle="Upload"
+            app:cpb_textIdle="登录"
             app:cpb_selectorIdle="@drawable/idle_state_selector"
             app:cpb_selectorComplete="@drawable/complete_state_selector"
             app:cpb_selectorError="@drawable/error_state_selector"
@@ -128,13 +130,13 @@
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
-            android:background="@android:color/holo_blue_dark"
+            android:background="@color/colorAccent"
 
             android:scaleX="0"
             android:scaleY="0"
             android:text="注册"
             android:textSize="20sp"
-            android:textColor="@android:color/holo_green_dark"/>
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
@@ -151,7 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
+        android:src="@android:color/transparent"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
         android:transitionName="@string/other_transition_name"

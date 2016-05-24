@@ -131,8 +131,8 @@ public class MainActivity extends BaseMvpActivity
         if (menuItem.hasSubMenu()) {
             Menu subMenu = menuItem.getSubMenu();
             subMenu.add(R.id.group1, 0x666, 0, "Group 0");
-            subMenu.add(R.id.group1, 0x667, 0, "Group 1");
-            subMenu.add(R.id.group1, 0x668, 0, "Group 2");
+//            subMenu.add(R.id.group1, 0x667, 0, "Group 1");
+//            subMenu.add(R.id.group1, 0x668, 0, "Group 2");
 //            MenuItem menuItem1 = subMenu.getItem(2);
 //            menuItem1.setIcon(getResources().getDrawable(R.drawable.btg_btn_arrow));
         }
@@ -161,13 +161,13 @@ public class MainActivity extends BaseMvpActivity
 //                mPvSat = (PasterView) vs_sat.inflate();
 //                mPvSun = (PasterView) vs_sun.inflate();
                 mTypeface = Typeface.createFromAsset(getAssets(), "fangzheng_jinglei.ttf");
-                mPvMon.setContent("星期一", mTypeface);
-                mPvTue.setContent("星期二", mTypeface);
-                mPvWed.setContent("星期三", mTypeface);
-                mPvThu.setContent("星期四", mTypeface);
-                mPvFri.setContent("星期五", mTypeface);
-                mPvSat.setContent("星期六", mTypeface);
-                mPvSun.setContent("星期日", mTypeface);
+                mPvMon.setContent("星期一\nLuffy支出20\nSix支出25", mTypeface);
+                mPvTue.setContent("星期二\nLuffy支出10\nSix支出23", mTypeface);
+                mPvWed.setContent("星期三\nLuffy支出20\nSix支出21", mTypeface);
+                mPvThu.setContent("星期四\nLuffy支出30\nSix支出24", mTypeface);
+                mPvFri.setContent("星期五\nLuffy支出24\nSix支出25", mTypeface);
+                mPvSat.setContent("星期六\nLuffy支出21\nSix支出35", mTypeface);
+                mPvSun.setContent("星期日\nLuffy支出20\nSix支出15", mTypeface);
             }
         }, 5000);
         mHandler.sendEmptyMessageDelayed(1, 100);
@@ -478,5 +478,6 @@ public class MainActivity extends BaseMvpActivity
 
     public void onClickMon(View view){
         startActivity(new Intent(this, PasterActivity.class));
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 }

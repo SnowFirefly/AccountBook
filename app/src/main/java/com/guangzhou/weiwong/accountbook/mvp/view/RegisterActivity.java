@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.dd.CircularProgressButton;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
 import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
@@ -50,16 +51,51 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
     @Bind(R.id.et_user) EditText mEtUser;
     @Bind(R.id.et_email) EditText mEtEmail;
     @Bind(R.id.et_pw) EditText mEtPw;
-    @Bind(R.id.et_confirm_pw) EditText mEtConfirmPw;
+     EditText mEtConfirmPw;
 
     String user, email, pw, confirmPw;
 
-    @OnClick(R.id.btn_register)
+    private void showProgressBtn(){
+        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.cpb_register);
+        circularButton1.setIndeterminateProgressMode(true);
+        circularButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (circularButton1.getProgress() == 0) {
+                    circularButton1.setProgress(50);
+                } else if (circularButton1.getProgress() == 100) {   // -1
+                    circularButton1.setProgress(0);
+                } else {
+                    circularButton1.setProgress(100);        // -1
+                    circularButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                }
+
+                /*if (circularButton1.getProgress() == 0) {
+                    simulateErrorProgress(circularButton1);
+                } else {
+                    circularButton1.setProgress(0);
+                }*/
+
+                /*if (circularButton1.getProgress() == 0) {
+                    circularButton1.setProgress(100);   // -1
+                } else {
+                    circularButton1.setProgress(0);
+                }*/
+
+            }
+        });
+    }
+
     public void onRegister(View view){
         user = mEtUser.getText().toString();
         email = mEtEmail.getText().toString();
         pw = mEtPw.getText().toString();
-        confirmPw = mEtConfirmPw.getText().toString();
+//        confirmPw = mEtConfirmPw.getText().toString();
         if (checkFormat()){
             iRegisterPresenter.register(user, email, pw);
         } else {
@@ -90,6 +126,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
             initViews();
         }
         Log.d(TAG, "onCreate done");
+        showProgressBtn();
     }
 
     // 初始化视图

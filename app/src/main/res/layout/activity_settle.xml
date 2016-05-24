@@ -24,7 +24,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="156dp"
-                android:background="?attr/colorPrimary"
+                android:background="@drawable/bg002"
                 android:elevation="4dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 tools:targetApi="21">
