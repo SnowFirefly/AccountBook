@@ -18,7 +18,7 @@ import com.guangzhou.weiwong.accountbook.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseMvpActivity {
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
     @Bind(R.id.btn_login_out) Button mBtnLoginOut;
 
@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -114,4 +114,5 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 }

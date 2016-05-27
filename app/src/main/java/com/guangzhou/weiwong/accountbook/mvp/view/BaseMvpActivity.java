@@ -2,9 +2,12 @@ package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 
 import com.bugtags.library.Bugtags;
+import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 
 /**
@@ -55,5 +58,19 @@ public abstract class BaseMvpActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
     }
 }

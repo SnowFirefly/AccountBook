@@ -216,6 +216,7 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         return null;
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -224,4 +225,6 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         }
         return super.onOptionsItemSelected(item);
     }
+*/
+
 }

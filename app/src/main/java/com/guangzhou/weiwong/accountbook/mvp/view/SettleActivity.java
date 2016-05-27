@@ -225,7 +225,7 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         showToolbar();
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -233,4 +233,5 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 }

@@ -20,6 +20,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
+import javax.inject.Inject;
+
+import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -51,6 +54,7 @@ public class NetworkApiService {
         return retrofit.create(ApiService.class);
     }
 
+    @Inject
     public NetworkApiService(){
         mApiService = provideApiService();
     }

@@ -32,7 +32,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="200dp"
                 android:layout_height="match_parent">
-            <EditText
+                <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_user"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
@@ -52,7 +52,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="200dp"
                 android:layout_height="match_parent">
-            <EditText
+                <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_email"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
@@ -73,7 +73,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="200dp"
                 android:layout_height="match_parent">
-            <EditText
+                <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_pw"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"

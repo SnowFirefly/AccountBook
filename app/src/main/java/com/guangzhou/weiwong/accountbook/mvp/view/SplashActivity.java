@@ -23,10 +23,10 @@ public class SplashActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                shimmer.cancel();
 //                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                shimmer.cancel();
                 finish();
                 Log.i("SplashActivity", "startActivity");
             }

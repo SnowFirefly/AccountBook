@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -48,9 +49,9 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
     @Bind(R.id.rl_container)
     RelativeLayout mRlContainer;
 
-    @Bind(R.id.et_user) EditText mEtUser;
-    @Bind(R.id.et_email) EditText mEtEmail;
-    @Bind(R.id.et_pw) EditText mEtPw;
+    @Bind(R.id.et_user) TextInputEditText mEtUser;
+    @Bind(R.id.et_email) TextInputEditText mEtEmail;
+    @Bind(R.id.et_pw) TextInputEditText mEtPw;
      EditText mEtConfirmPw;
 
     String user, email, pw, confirmPw;

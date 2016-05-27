@@ -52,7 +52,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" >
-            <EditText
+                <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_user"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
@@ -81,7 +81,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-            <EditText
+                <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_pw"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
@@ -104,8 +104,8 @@
             android:layout_gravity="center_horizontal"
             android:textSize="20sp"
             android:textColor="@android:color/white"
-            app:cpb_textComplete="Complete"
-            app:cpb_textError="Error"
+            app:cpb_textComplete="成功"
+            app:cpb_textError="失败"
             app:cpb_textIdle="登录"
             app:cpb_selectorIdle="@drawable/idle_state_selector"
             app:cpb_selectorComplete="@drawable/complete_state_selector"
@@ -119,9 +119,9 @@
 
         app:cpb_paddingProgress="10dp"
 
+
         app:cpb_iconComplete="@drawable/ic_action_accept"
         app:cpb_iconError="@drawable/ic_action_cancel"
-        app:cpb_textIdle="Upload"
         -->
 
         <Button
@@ -144,6 +144,7 @@
         android:id="@+id/iv_smile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alpha="0"
         android:src="@drawable/ic_mood_grey600_48dp"
         android:layout_centerInParent="true"/>
 

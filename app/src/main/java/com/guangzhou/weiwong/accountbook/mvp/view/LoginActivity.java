@@ -12,9 +12,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -60,8 +63,8 @@ import butterknife.ButterKnife;
 public class LoginActivity extends BaseMvpActivity implements IView{
     private final String TAG = getClass().getName();
     private FloatingActionButton mFab;
-    @Bind(R.id.et_user) EditText mEtUser;
-    @Bind(R.id.et_pw) EditText mEtPw;
+    @Bind(R.id.et_user) TextInputEditText mEtUser;
+    @Bind(R.id.et_pw) TextInputEditText mEtPw;
     @Bind(R.id.ll_login) LinearLayout mLlLogin;
 
     @Bind(R.id.tv_shimmer) ShimmerTextView mShimmerTv;
@@ -123,14 +126,21 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 
 //        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
         Log.i(TAG, "onCreate: " + "end");
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showProgressBtn();
+                animate();
+
+            }
+        }, 100);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         Log.i(TAG, "onStart: " + "before show and animate");
-        showProgressBtn();
-        animate();
         Log.i(TAG, "onStart: " + "after show and animate");
     }
 
@@ -316,7 +326,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
 
         ViewCompat.animate(mIvSmile)
-                .translationY(-300)
+                .translationY(-300).alpha(1)
                 .setStartDelay(STARTUP_DELAY)
                 .setDuration(ANIM_ITEM_DURATION)
                 .setInterpolator(new DecelerateInterpolator())
@@ -370,8 +380,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                 animation.setStartOffset((ITEM_DELAY * i) + 500);
                 animation.setFillEnabled(true);
                 animation.setFillAfter(true);
-                v.setAnimation(animation);
-                animation.start();
+                v.startAnimation(animation);
             } else if (v instanceof Button) { // Button控件, 从缩小到扩大
                 viewAnimator = ViewCompat.animate(v)
                         .scaleY(1).scaleX(1)

@@ -34,7 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GroupActivity extends AppCompatActivity {
+public class GroupActivity extends BaseMvpActivity {
     @Bind(R.id.ll_group) LinearLayout mLlRoot;
 
     @Override
@@ -160,7 +160,7 @@ public class GroupActivity extends AppCompatActivity {
                 .start();
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -168,4 +168,5 @@ public class GroupActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+ */
 }

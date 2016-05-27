@@ -122,7 +122,7 @@ public class ChartsActivity extends BaseMvpActivity {
         });
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -130,4 +130,5 @@ public class ChartsActivity extends BaseMvpActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+*/
 }

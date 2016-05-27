@@ -47,8 +47,10 @@ public class PasterActivity extends BaseMvpActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate: " + "end");
         setContentView(R.layout.activity_paster);
         ButterKnife.bind(this);
+        Log.i(TAG, "onCreate: " + "after bind");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,6 +64,7 @@ public class PasterActivity extends BaseMvpActivity {
                 sEditable = !sEditable;
             }
         });
+        Log.i(TAG, "onCreate: " + "end");
     }
 
     @Override
@@ -154,12 +157,24 @@ public class PasterActivity extends BaseMvpActivity {
         return false;
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
-            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+//            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        Log.d(TAG, "finish");
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

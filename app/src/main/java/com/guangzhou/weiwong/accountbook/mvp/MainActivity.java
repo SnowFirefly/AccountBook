@@ -479,5 +479,6 @@ public class MainActivity extends BaseMvpActivity
     public void onClickMon(View view){
         startActivity(new Intent(this, PasterActivity.class));
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+        Log.i(TAG, "onClickMon: " + "startActivity");
     }
 }
