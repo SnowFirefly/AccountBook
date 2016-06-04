@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.guangzhou.weiwong.accountbook.R;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.MemberItem;
+import com.guangzhou.weiwong.accountbook.mvp.model.item.MemberItem;
 
 import java.util.ArrayList;
 import java.util.List;

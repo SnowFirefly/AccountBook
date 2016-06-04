@@ -15,21 +15,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.adapter.SettleAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.SettleItem;
-import com.guangzhou.weiwong.accountbook.ui.HidingScrollListener;
+import com.guangzhou.weiwong.accountbook.mvp.model.item.SettleItem;
 import com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView;
 
 import java.lang.ref.WeakReference;

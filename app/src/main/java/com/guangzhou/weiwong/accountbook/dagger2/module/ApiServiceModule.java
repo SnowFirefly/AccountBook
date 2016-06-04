@@ -1,8 +1,6 @@
 package com.guangzhou.weiwong.accountbook.dagger2.module;
 
-import com.guangzhou.weiwong.accountbook.dagger2.ActivityScope;
 import com.guangzhou.weiwong.accountbook.mvp.model.ApiService;
-import com.guangzhou.weiwong.accountbook.mvp.model.NetworkApiService;
 
 import javax.inject.Singleton;
 
@@ -17,11 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 public class ApiServiceModule {
-    @Provides
-    @Singleton
-    NetworkApiService provideNetworkApiService(ApiService apiService){
-        return new NetworkApiService(apiService);
-    }
 
     @Provides
     @Singleton

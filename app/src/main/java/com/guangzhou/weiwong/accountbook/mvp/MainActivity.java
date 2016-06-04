@@ -21,22 +21,13 @@ import android.view.MenuItem;
 import android.view.ViewStub;
 import android.view.animation.AnimationUtils;
 
-import butterknife.OnClick;
-import cn.aigestudio.datepicker.cons.DPMode;
-import cn.aigestudio.datepicker.views.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.guangzhou.weiwong.accountbook.R;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.MainPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.view.BaseMvpActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.ChartsActivity;
@@ -46,9 +37,7 @@ import com.guangzhou.weiwong.accountbook.mvp.view.IView;
 import com.guangzhou.weiwong.accountbook.mvp.view.PasterActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.ProfileActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.SettleActivity;
-import com.guangzhou.weiwong.accountbook.ui.PasterEditView;
 import com.guangzhou.weiwong.accountbook.ui.PasterView;
-import com.guangzhou.weiwong.accountbook.utils.HttpUtil;
 
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -57,8 +46,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -237,7 +224,7 @@ public class MainActivity extends BaseMvpActivity
 
     @Override
     protected MainPresenter createPresenter() {
-        return new MainPresenter(this);
+        return new MainPresenter();
     }
 
     @Override
@@ -341,13 +328,13 @@ public class MainActivity extends BaseMvpActivity
     }
 
     @Override
-    public void onLoginResult(User user) {
+    public void onLoginResult(Result result) {
 
     }
 
     @Override
-    public void onRegisterResult(RegisterResult user) {
-        Log.i(TAG, user.toString());
+    public void onRegisterResult(Result result) {
+        Log.i(TAG, result.toString());
     }
 
 

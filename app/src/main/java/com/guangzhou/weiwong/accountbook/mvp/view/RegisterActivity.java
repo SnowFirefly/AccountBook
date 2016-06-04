@@ -1,14 +1,12 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.annotation.TargetApi;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Transition;
@@ -25,16 +23,13 @@ import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
 import com.guangzhou.weiwong.accountbook.R;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IRegisterPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.RegisterPresenter;
 import com.guangzhou.weiwong.accountbook.utils.AnimUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class RegisterActivity extends BaseMvpActivity implements IView{
     private final String TAG = "RegisterActivity";
@@ -71,7 +66,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
                     circularButton1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            onRegister(v);
                         }
                     });
                 }
@@ -106,8 +101,8 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
     }
 
     private boolean checkFormat(){
-        if (user == null || email == null || pw == null || confirmPw == null
-                || user.equals("") || email.equals("") || pw.equals("") || confirmPw.equals(""))
+        if (user == null || email == null || pw == null //|| confirmPw == null
+                || user.equals("") || email.equals("") || pw.equals("") )
             return false;
         return true;
     }
@@ -119,6 +114,7 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
         ButterKnife.bind(this);
         Log.d(TAG, "onCreate");
         iRegisterPresenter = createPresenter();
+        iRegisterPresenter.onAttach(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setupEnterAnimation(); // 入场动画
@@ -256,16 +252,16 @@ public class RegisterActivity extends BaseMvpActivity implements IView{
 
     @Override
     protected IRegisterPresenter createPresenter() {
-        return new RegisterPresenter(this);
+        return new RegisterPresenter();
     }
 
     @Override
-    public void onLoginResult(User user) {
+    public void onLoginResult(Result result) {
 
     }
 
     @Override
-    public void onRegisterResult(RegisterResult user) {
-        Toast.makeText(this, user.toString(), Toast.LENGTH_LONG).show();
+    public void onRegisterResult(Result result) {
+        Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
     }
 }

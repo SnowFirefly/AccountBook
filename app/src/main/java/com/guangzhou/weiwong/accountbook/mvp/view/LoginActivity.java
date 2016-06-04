@@ -1,59 +1,43 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BlurMaskFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
-import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
+import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerLoginPresenterComponent;
 import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
-import com.guangzhou.weiwong.accountbook.mvp.model.NetworkApiService;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
+import com.guangzhou.weiwong.accountbook.mvp.model.Network;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.ILoginPresenter;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.LoginPresenter;
 import com.guangzhou.weiwong.accountbook.utils.BlurUtil;
-import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerTextView;
 
 import javax.inject.Inject;
 
@@ -62,17 +46,25 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends BaseMvpActivity implements IView{
     private final String TAG = getClass().getName();
-    private FloatingActionButton mFab;
+    @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.et_user) TextInputEditText mEtUser;
     @Bind(R.id.et_pw) TextInputEditText mEtPw;
     @Bind(R.id.ll_login) LinearLayout mLlLogin;
 
-    @Bind(R.id.tv_shimmer) ShimmerTextView mShimmerTv;
-    private Shimmer mShimmer;
-
     @Inject
-    NetworkApiService networkApiService;
-    private ILoginPresenter loginPresenter;
+    Network network;
+    @Inject ILoginPresenter iLoginPresenter;
+
+    @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+        super.setupActivityComponent(appComponent);
+        DaggerLoginPresenterComponent.builder()
+                .appComponent(appComponent)
+//                .loginPresenterModule(new LoginPresenterModule(this))
+                .build()
+                .inject(this);
+        iLoginPresenter.onAttach(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,32 +73,11 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         Log.i(TAG, "onCreate: " + "before bind");
         ButterKnife.bind(this);
         Log.i(TAG, "onCreate: " + "after bind");
-//        DaggerActivityComponent.builder().build().injectActivity(this);
-        networkApiService = new NetworkApiService();
-        loginPresenter = createPresenter();
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-
-//        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
-//        mFab.startAnimation(animation);
-//        animation.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {}
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-////                mFab.startAnimation(animation);
-//            }
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {}
-//        });
-//        animation.setRepeatMode(Animation.REVERSE);
-
+//        mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                startOtherActivity(view);
-//                dialogShow(mEtUser.getText().toString());
-
+                startRegisterActivity(view);
             }
         });
         Log.i(TAG, "onCreate: " + "before get ActivityManager");
@@ -114,34 +85,21 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         int heapSize = manager.getMemoryClass();
         Log.i(TAG, "heapSize: " + heapSize + "MB");
 
-//        mShimmer = new Shimmer();
-//        mShimmer.start(mShimmerTv);
-        /*mShimmer.setRepeatCount(0)
-                .setDuration(500)
-                .setStartDelay(300)
-                .setDirection(Shimmer.ANIMATION_DIRECTION_RTL)
-                .setAnimatorListener(new Animator.AnimatorListener() {
-                });*/
-
-
-//        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
-        Log.i(TAG, "onCreate: " + "end");
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 showProgressBtn();
                 animate();
-
             }
         }, 100);
+
+        iLoginPresenter.testLogin("wong", "123");
+        Log.i(TAG, "onCreate: " + "end");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        Log.i(TAG, "onStart: " + "before show and animate");
-        Log.i(TAG, "onStart: " + "after show and animate");
     }
 
     @Override
@@ -150,14 +108,9 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         mLlLogin.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected ILoginPresenter createPresenter() {
-        return new LoginPresenter(this);
-    }
-
     public void login(View view){
         if (checkFormat(mEtUser.getText().toString(), mEtPw.getText().toString())) {
-            loginPresenter.testLogin(mEtUser.getText().toString(), mEtPw.getText().toString());
+            iLoginPresenter.login(mEtUser.getText().toString(), mEtPw.getText().toString());
         } else {
             Snackbar.make(view, "Username and password cannot be null.", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -165,7 +118,6 @@ public class LoginActivity extends BaseMvpActivity implements IView{
 
         }
         Log.d(TAG, "login()");
-
     }
 
     private boolean checkFormat(String userName, String password){
@@ -175,17 +127,17 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     }
 
     @Override
-    public void onLoginResult(User user) {
-        Toast.makeText(this, user.toString(), Toast.LENGTH_LONG).show();
+    public void onLoginResult(Result result) {
+        Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onRegisterResult(RegisterResult user) {
+    public void onRegisterResult(Result result) {
 
     }
 
     // Fab的跳转事件
-    public void startOtherActivity(View view) {
+    public void startRegisterActivity(View view) {
         mLlLogin.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options =
@@ -194,57 +146,6 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         } else {
             startActivity(new Intent(this, RegisterActivity.class));
         }
-    }
-
-    private Effectstype effect;
-    // test dialog
-    private void dialogShow(String stype){
-        switch (stype) {
-            case "1": effect=Effectstype.Fadein;break;
-            case "2": effect=Effectstype.Slideright;break;
-            case "3": effect=Effectstype.Slideleft;break;
-            case "4": effect=Effectstype.Slidetop;break;
-            case "5": effect=Effectstype.SlideBottom;break;
-            case "6": effect=Effectstype.Newspager;break;
-            case "7": effect=Effectstype.Fall;break;
-            case "8": effect=Effectstype.Sidefill;break;
-            case "9": effect=Effectstype.Fliph;break;
-            case "10": effect=Effectstype.Flipv;break;
-            case "11": effect=Effectstype.RotateBottom;break;
-            case "12": effect=Effectstype.RotateLeft;break;
-            case "13": effect=Effectstype.Slit;break;
-            case "14": effect=Effectstype.Shake;break;
-            default:  effect=Effectstype.Fadein; break;
-        }
-
-        NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
-        dialogBuilder
-                .withTitle("Modal Dialog")                                  //.withTitle(null)  no title
-                .withTitleColor("#FFFFFF")                                  //def
-                .withDividerColor("#11000000")                              //def
-                .withMessage("This is a modal Dialog.")                     //.withMessage(null)  no Msg
-                .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                .withDialogColor("#FFE74C3C")                               //def  | withDialogColor(int resid)                               //def
-                .withIcon(getResources().getDrawable(R.drawable.ic_launcher))
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                .withDuration(400)                                          //def 700
-                .withEffect(effect)                                         //def Effectstype.Slidetop
-                .withButton1Text("OK")                                      //def gone
-                .withButton2Text("Cancel")                                  //def gone
-                .setCustomView(R.layout.custom_view, this)         //.setCustomView(View or ResId,context)
-                .setButton1Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setButton2Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "i'm btn2", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
     }
 
     private void showProgressBtn(){
@@ -318,6 +219,7 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     @Bind(R.id.iv_smile) ImageView mIvSmile;
     @Bind(R.id.btn_register) Button mBtnRegister;
     private void animate(){
+        // 背景模糊（毛玻璃效果）
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_login);

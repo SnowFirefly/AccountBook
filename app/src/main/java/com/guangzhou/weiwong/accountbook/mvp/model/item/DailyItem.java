@@ -1,4 +1,4 @@
-package com.guangzhou.weiwong.accountbook.mvp.model.data;
+package com.guangzhou.weiwong.accountbook.mvp.model.item;
 
 import com.guangzhou.weiwong.accountbook.R;
 

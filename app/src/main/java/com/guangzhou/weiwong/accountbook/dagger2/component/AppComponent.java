@@ -4,8 +4,6 @@ import android.app.Application;
 
 import com.guangzhou.weiwong.accountbook.dagger2.module.ApiServiceModule;
 import com.guangzhou.weiwong.accountbook.dagger2.module.AppModule;
-import com.guangzhou.weiwong.accountbook.mvp.model.ApiService;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
 
 import javax.inject.Singleton;
 
@@ -19,7 +17,6 @@ import dagger.Component;
 public interface AppComponent {
     Application getApplication();
 
-    ApiService getService();
+//    ApiService getService();
 
-//    User getUser();
 }

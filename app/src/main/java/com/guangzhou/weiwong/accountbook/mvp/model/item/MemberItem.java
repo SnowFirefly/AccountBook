@@ -1,4 +1,4 @@
-package com.guangzhou.weiwong.accountbook.mvp.model.data;
+package com.guangzhou.weiwong.accountbook.mvp.model.item;
 
 import java.util.ArrayList;
 import java.util.List;

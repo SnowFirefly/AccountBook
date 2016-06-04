@@ -12,20 +12,17 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bugtags.library.Bugtags;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.adapter.DailyAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.DailyItem;
+import com.guangzhou.weiwong.accountbook.mvp.model.item.DailyItem;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView;
 

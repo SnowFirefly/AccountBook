@@ -1,15 +1,30 @@
 package com.guangzhou.weiwong.accountbook.mvp.presenter;
 
-import android.util.Log;
-
-import com.guangzhou.weiwong.accountbook.mvp.model.NetworkApiService;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerNetworkComponent;
+import com.guangzhou.weiwong.accountbook.mvp.model.Network;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.User;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
-
-import org.json.JSONObject;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
@@ -19,79 +34,139 @@ import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by Tower on 2016/4/25.
  */
 public class LoginPresenter implements ILoginPresenter {
-    private final String TAG = getClass().getName();
-    private NetworkApiService networkApiService;
+    private final String TAG = getClass().getSimpleName();
+    @Inject Network network;
     private IView iView;
+
+    @Override
+    public void onAttach(IView iView) {
+        this.iView = iView;
+    }
 
     @Override
     public void onDetach() {
 
     }
 
-    public LoginPresenter(IView iView){
-        networkApiService = new NetworkApiService();
-        this.iView = iView;
+    public LoginPresenter() {
+        DaggerNetworkComponent.builder().build().inject(this);
     }
 
     @Override
     public void login(String login_name, String password){
-//        testLogin(login_name, password);
-        Log.d(TAG, "login()");
-        Observable<User> observable = networkApiService.login(login_name, password);
+        MyLog.d(TAG, "login(" + login_name + ", " + password + ")");
+        Observable<Result> observable = network.login(login_name, password);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<User, Boolean>() {
-                    @Override
-                    public Boolean call(User user) {
-                        return user.getAck().equals("fail");
-                    }
-                })
-                .subscribe(new Subscriber<User>() {
+                .subscribe(new Subscriber<Result>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted()");
+                        MyLog.d(TAG, "onCompleted()");
                     }
 
                     @Override
-                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError():" + e.getMessage());
+                    public void onError(Throwable e) {
+                        MyLog.d(TAG, "onError():" + e.getMessage());
                     }
 
                     @Override
-                    public void onNext(User user) {
-                        Log.d(TAG, "onNext()");
-                        Log.d(TAG, user.toString());
-                        iView.onLoginResult(user);
+                    public void onNext(Result result) {
+                        MyLog.d(TAG, "onNext()");
+                        MyLog.i(TAG, result.toString());
+//                        User user = (User) result.getData();        // convert fail
+
+                        iView.onLoginResult(result);
+
+                        String newStr = result.getData().toString().replace("null", "unknown");
+                        MyLog.i(TAG, newStr);
+                        Gson gson = new GsonBuilder()
+                                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                                .create();
+//                        User user = gson.fromJson(result.getData().toString(), User.class);
+                        User user = gson.fromJson(gson.toJson(result.getData()), User.class);
+                        MyLog.i(TAG, "json: " + gson.toJson(result.getData()));
+                        MyLog.i(TAG, "user: " + user.toString());
+                        MyLog.i(TAG, "id: " + user.getId());
+                        MyLog.i(TAG, "name: " + user.getName());
+                        MyLog.i(TAG, "password: " + user.getPassword());
+                        MyLog.i(TAG, "email: " + user.getEmail());
+                        MyLog.i(TAG, "lastLoginTime: " + user.getLastLoginTime());
+                        MyLog.i(TAG, "createTime: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(user.getCreateTime()));
+                        MyLog.i(TAG, "type: " + user.getType());
+                    }
+                });
+    }
+
+    public void login2(String login_name, String password){
+        MyLog.d(TAG, "login2(" + login_name + ", " + password +")");
+        Observable<Response<Result>> observable = network.login2(login_name, password);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+//                .filter(new Func1<Result, Boolean>() {
+//                    @Override
+//                    public Boolean call(Result user) {
+//                        return user.getAck().equals("fail");
+//                    }
+//                })
+                .subscribe(new Subscriber<Response<Result>>() {
+                    @Override
+                    public void onCompleted() {
+                        MyLog.d(TAG, "onCompleted()");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        MyLog.d(TAG, "onError(): " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Response<Result> user) {
+                        MyLog.d(TAG, "onNext()");
+                        MyLog.i(TAG, user.body().toString());
+                        Gson gson = new GsonBuilder().create();
+                        if (user.body().getAck().equals("success")) {
+                            User data = gson.fromJson(user.body().getData().toString(), User.class);
+                            MyLog.i(LoginPresenter.this, data.toString());
+                        }
+                        iView.onLoginResult(user.body());
+                        if (user.errorBody() != null) {
+                            MyLog.d(TAG, user.errorBody().toString());
+                        }
                     }
                 });
     }
 
     @Override
     public void testLogin(String userName, String password){
-        Call<User> call = networkApiService.testLogin(userName, password);
-        call.enqueue(new Callback<User>() {
+        MyLog.d(TAG, "testLogin()");
+        Call<Result> call = network.testLogin(userName, password);
+        call.enqueue(new Callback<Result>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<Result> call, Response<Result> response) {
                 try {
-                    Log.i(TAG, response.body().toString());
-                    Log.e(TAG, response.errorBody().string());
+                    MyLog.i(TAG, response.body().toString());
+                    MyLog.e(TAG, response.errorBody().string());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, t.getMessage());
+            public void onFailure(Call<Result> call, Throwable t) {
+                MyLog.e(TAG, t.getMessage());
             }
         });
+    }
+
+    private boolean ackSuccess(Result result){
+        String ack = result.getAck();
+        return ack.equals("success");
     }
 
 }

@@ -53,7 +53,7 @@ public class LineChartFragment extends BaseFragment {
 
     private LineChartData generateLineChartData() {
         int numValues = 32;
-
+        // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<PointValue> values = new ArrayList<PointValue>();
         for (int i = 1; i < numValues; ++i) {
             values.add(new PointValue(i, (float) Math.random() * 100f));

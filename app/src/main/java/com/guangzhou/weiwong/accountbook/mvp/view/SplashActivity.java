@@ -20,6 +20,13 @@ public class SplashActivity extends AppCompatActivity {
         ShimmerTextView shimmerTextView = (ShimmerTextView) findViewById(R.id.tv_shimmer);
         final Shimmer shimmer = new Shimmer();
         shimmer.start(shimmerTextView);
+        /*mShimmer.setRepeatCount(0)
+                .setDuration(500)
+                .setStartDelay(300)
+                .setDirection(Shimmer.ANIMATION_DIRECTION_RTL)
+                .setAnimatorListener(new Animator.AnimatorListener() {
+                });*/
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {

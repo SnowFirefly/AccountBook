@@ -2,15 +2,17 @@ package com.guangzhou.weiwong.accountbook.mvp.presenter;
 
 import android.util.Log;
 
-import com.guangzhou.weiwong.accountbook.mvp.model.NetworkApiService;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.User;
+import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerNetworkComponent;
+import com.guangzhou.weiwong.accountbook.mvp.model.Network;
+import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
+
+import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -18,21 +20,21 @@ import rx.schedulers.Schedulers;
  */
 public class RegisterPresenter implements IRegisterPresenter {
     private final String TAG = getClass().getName();
-    private NetworkApiService networkApiService;
+    @Inject Network network;
     private IView iView;
 
-    public RegisterPresenter(IView iView){
-        networkApiService = new NetworkApiService();
-        this.iView = iView;
+    public RegisterPresenter(){
+        DaggerNetworkComponent.builder().build().inject(this);
+        network.login("RegisterPresenter", "network.login");
     }
 
     @Override
     public void register(String user, String email, String password) {
         Log.d(TAG, "register()");
-        Observable<RegisterResult> observable = networkApiService.register(user, email, password);
+        Observable<Result> observable = network.register(user, email, password);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RegisterResult>() {
+                .subscribe(new Subscriber<Result>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted()");
@@ -44,12 +46,17 @@ public class RegisterPresenter implements IRegisterPresenter {
                     }
 
                     @Override
-                    public void onNext(RegisterResult registerResult) {
-                        Log.d(TAG, "onNext()");
-                        Log.d(TAG, registerResult.toString());
-                        iView.onRegisterResult(registerResult);
+                    public void onNext(Result result) {
+                        MyLog.d(TAG, "onNext()");
+                        MyLog.d(TAG, result.toString());
+                        iView.onRegisterResult(result);
                     }
                 });
+    }
+
+    @Override
+    public void onAttach(IView iView) {
+        this.iView = iView;
     }
 
     @Override

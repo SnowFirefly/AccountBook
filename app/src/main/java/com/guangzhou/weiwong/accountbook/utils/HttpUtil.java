@@ -2,22 +2,15 @@ package com.guangzhou.weiwong.accountbook.utils;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.guangzhou.weiwong.accountbook.mvp.model.data.RegisterResult;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-
-import retrofit2.http.HTTP;
 
 /**
  * Created by Tower on 2016/4/28.
@@ -55,7 +48,7 @@ public class HttpUtil {
                 is.close();
                 baos.close();
                 httpResponseResult = new String(baos.toByteArray());
-//                RegisterResult result = new Gson().fromJson(httpResponseResult, RegisterResult.class);
+//                Result result = new Gson().fromJson(httpResponseResult, Result.class);
                 Log.d(TAG, "httpResponseResult = " + (httpResponseResult));
 //                Log.d(TAG, "httpResponseResult = " + result);
             }
