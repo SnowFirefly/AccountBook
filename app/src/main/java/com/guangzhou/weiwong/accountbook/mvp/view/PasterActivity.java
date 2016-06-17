@@ -23,6 +23,8 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.ui.PasterEditView;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,6 +48,16 @@ public class PasterActivity extends BaseMvpActivity implements IView {
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.pev_note) PasterEditView mPevNote;
+
+    @Bind(R.id.rg_money_type) RadioGroup mRgMoneyType;
+    @Bind(R.id.rg_categories) RadioGroup mRgCategories;
+    @Bind(R.id.rb_spend) RadioButton mRbSpend;
+    @Bind(R.id.rb_earn) RadioButton mRbEarn;
+    @Bind(R.id.rb_cate_food) RadioButton mRbood;
+    @Bind(R.id.rb_cate_digital) RadioButton mRbDigital;
+    @Bind(R.id.rb_cate_daily) RadioButton mRbDaily;
+    @Bind(R.id.rb_cate_clothes) RadioButton mRbClothes;
+    @Bind(R.id.rb_cate_other) RadioButton mRbOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +77,24 @@ public class PasterActivity extends BaseMvpActivity implements IView {
             public void onClick(View view) {
                 mPevNote.setEnabled(isEditable);
                 isEditable = !isEditable;
+            }
+        });
+        mRgCategories.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                MyLog.i(TAG, "checkedId: " + checkedId);
+                switch (checkedId) {
+                    case R.id.rb_cate_food:
+                        break;
+                    case R.id.rb_cate_digital:
+                        break;
+                    case R.id.rb_cate_daily:
+                        break;
+                    case R.id.rb_cate_clothes:
+                        break;
+                    case R.id.rb_cate_other:
+                        break;
+                }
             }
         });
         Log.i(TAG, "onCreate: " + "end");

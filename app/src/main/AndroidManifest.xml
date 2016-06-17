@@ -27,7 +27,8 @@
         <activity
             android:name=".mvp.view.PasterActivity"
             android:label="@string/title_activity_paster"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".mvp.view.ChartsActivity"
             android:label="@string/title_activity_charts"

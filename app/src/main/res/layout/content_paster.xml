@@ -50,14 +50,15 @@
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="25sp" />
             <EditText
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:inputType="numberDecimal"/>
 
             <RadioGroup
+                android:id="@+id/rg_money_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="0dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -95,25 +96,30 @@
             android:layout_height="150dp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="40dp"
+            android:layout_marginBottom="30dp"
             android:padding="0dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
             <TextView
                 android:id="@+id/tv_category_title"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="消费类型:"
+                android:text="消费类型"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 />
-            <ScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <HorizontalScrollView
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                >
                 <RadioGroup
+                    android:id="@+id/rg_categories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:orientation="horizontal">
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -152,7 +158,7 @@
                         android:id="@+id/rb_cate_other"
                         />
                 </RadioGroup>
-            </ScrollView>
+            </HorizontalScrollView>
             <!--<com.bugtags.library.core.ui.rounded.CircleImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
