@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = PasterPresenterModule.class)
 public interface PasterPresenterComponent {
-    @Inject
     void inject(PasterActivity pasterActivity);
 
     IPasterPresenter iPasterPresenter();

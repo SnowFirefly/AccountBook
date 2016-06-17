@@ -20,6 +20,7 @@ import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.adapter.MemberAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.model.item.MemberItem;
 
 import butterknife.Bind;
@@ -63,6 +64,11 @@ public class GroupActivity extends BaseMvpActivity {
         mLlRoot.addView(frameLayout1);*/
 
         createGroup();
+    }
+
+    @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+
     }
 
     CircleImageView mCiDelete;

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.adapter.SettleAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.model.item.SettleItem;
 import com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView;
 
@@ -82,6 +83,11 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
 
         mHandler = new MyHandler(this);
         mHandler.sendEmptyMessageDelayed(2, 3000);
+    }
+
+    @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+
     }
 
     private static class MyHandler extends Handler {

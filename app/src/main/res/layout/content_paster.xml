@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="40dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -44,30 +45,54 @@
                 android:layout_height="40dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:gravity="center"
                 android:text="¥"
+                android:textColor="@android:color/holo_red_light"
                 android:textSize="25sp" />
             <EditText
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:inputType="numberDecimal"/>
-            <com.bugtags.library.core.ui.rounded.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/btg_icon_cross_pressed"/>
-            <com.bugtags.library.core.ui.rounded.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/btg_icon_tick_normal"/>
 
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="支出"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/rb_spend"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="收入"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/rb_earn"
+                    />
+            </RadioGroup>
         </LinearLayout>
+        <!--<com.bugtags.library.core.ui.rounded.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/btg_icon_cross_pressed"/>
+        <com.bugtags.library.core.ui.rounded.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/btg_icon_tick_normal"/>-->
 
         <LinearLayout
             android:id="@+id/ll_category"
             android:layout_below="@id/ll_money"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="150dp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="40dp"
             android:padding="0dp"
@@ -77,29 +102,65 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="类型:"
+                android:text="消费类型:"
+                android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 />
-            <com.bugtags.library.core.ui.rounded.CircleImageView
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="饮食"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/rb_cate_food"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="电子产品"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/rb_cate_digital"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="日用品"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/rb_cate_daily"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="服饰"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/rb_cate_clothes"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="其他"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/rb_cate_other"
+                        />
+                </RadioGroup>
+            </ScrollView>
+            <!--<com.bugtags.library.core.ui.rounded.CircleImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/btg_icon_assistivebutton_submit"/>
-            <com.bugtags.library.core.ui.rounded.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/btg_icon_assistivebutton_submit"/>
-            <com.bugtags.library.core.ui.rounded.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/btg_icon_assistivebutton_submit"/>
-            <com.bugtags.library.core.ui.rounded.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/btg_icon_assistivebutton_submit_pressed"/>
+                android:src="@drawable/btg_icon_assistivebutton_submit"/>-->
 
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_below="@id/ll_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,22 +179,7 @@
                 android:text="选择"
                 android:onClick="onShowPopup"
                 android:background="@android:color/holo_blue_bright"/>
-        </LinearLayout>
-
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:padding="20dp"
-            android:text="Edit"
-            android:textSize="20sp"
-            android:textColor="@android:color/holo_blue_dark"
-            android:background="@android:color/transparent"
-            />
-
+        </LinearLayout>-->
 
     </RelativeLayout>
 </LinearLayout>

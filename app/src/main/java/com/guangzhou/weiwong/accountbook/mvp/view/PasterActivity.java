@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -26,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.ui.PasterEditView;
@@ -36,18 +38,18 @@ import butterknife.OnClick;
 import cn.aigestudio.datepicker.cons.DPMode;
 import cn.aigestudio.datepicker.views.DatePicker;
 
-public class PasterActivity extends BaseMvpActivity {
+public class PasterActivity extends BaseMvpActivity implements IView {
     private final String TAG = getClass().getName();
-    private boolean sEditable;
+    private boolean isEditable;
+    private int weekDay = 1;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.pev_note) PasterEditView mPevNote;
-    @Bind(R.id.btn_edit) Button mBtnEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: " + "end");
+        Log.i(TAG, "onCreate: " + "start");
         setContentView(R.layout.activity_paster);
         ButterKnife.bind(this);
         Log.i(TAG, "onCreate: " + "after bind");
@@ -60,23 +62,22 @@ public class PasterActivity extends BaseMvpActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPevNote.setEnabled(sEditable);
-                sEditable = !sEditable;
+                mPevNote.setEnabled(isEditable);
+                isEditable = !isEditable;
             }
         });
         Log.i(TAG, "onCreate: " + "end");
     }
 
     @Override
-    protected IPresenter createPresenter() {
-        return null;
+    protected void setupActivityComponent(AppComponent appComponent) {
+
     }
 
-    @OnClick(R.id.btn_edit)
     public void onEdit(View view){
         Log.d(TAG, "onEdit()");
-        mPevNote.setEnabled(sEditable);
-        sEditable = !sEditable;
+        mPevNote.setEnabled(isEditable);
+        isEditable = !isEditable;
     }
 
     @Bind(R.id.view_bg_gray) View mViewBg;
@@ -157,24 +158,35 @@ public class PasterActivity extends BaseMvpActivity {
         return false;
     }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-//            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-        Log.d(TAG, "finish");
-    }*/
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void onSignResult(String resultMsg) {
+
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+
+    }
+
+    @Override
+    public <T> void onLoadResult(int type, T bean) {
+
+    }
+
+    @Override
+    public void onCommitResult(String resultMsg) {
+
     }
 }

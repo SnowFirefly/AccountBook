@@ -16,10 +16,15 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerNetworkComponent;
+import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerUploadComponent;
+import com.guangzhou.weiwong.accountbook.mvp.model.IDownloadModel;
+import com.guangzhou.weiwong.accountbook.mvp.model.IUploadModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.Network;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.User;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
+import com.guangzhou.weiwong.accountbook.utils.ApiException;
+import com.guangzhou.weiwong.accountbook.utils.ErrorHandler;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
 
 import java.io.IOException;
@@ -42,6 +47,8 @@ import rx.schedulers.Schedulers;
 public class LoginPresenter implements ILoginPresenter {
     private final String TAG = getClass().getSimpleName();
     @Inject Network network;
+    private IUploadModel iUploadModel;
+    private IDownloadModel iDownloadModel;
     private IView iView;
 
     @Override
@@ -56,6 +63,14 @@ public class LoginPresenter implements ILoginPresenter {
 
     public LoginPresenter() {
         DaggerNetworkComponent.builder().build().inject(this);
+    }
+
+    public LoginPresenter(IUploadModel iUploadModel, IDownloadModel iDownloadModel) {
+        this.iUploadModel = iUploadModel;
+        MyLog.e(this, "iUploadModel: " + iUploadModel);
+        DaggerNetworkComponent.builder().build().inject(this);
+        this.iDownloadModel = iDownloadModel;
+        MyLog.e(this, "iDownloadModel: " + iDownloadModel);
     }
 
     @Override
@@ -73,6 +88,11 @@ public class LoginPresenter implements ILoginPresenter {
                     @Override
                     public void onError(Throwable e) {
                         MyLog.d(TAG, "onError():" + e.getMessage());
+                        ApiException apiException = ErrorHandler.handle(e);
+                        MyLog.i(TAG, "apiException: " + apiException);
+                        MyLog.i(TAG, "apiException.code: " + apiException.getCode());
+                        MyLog.i(TAG, "apiException.msg: " + apiException.getMsg());
+                        iView.onError(apiException.getMsg());
                     }
 
                     @Override
@@ -81,7 +101,7 @@ public class LoginPresenter implements ILoginPresenter {
                         MyLog.i(TAG, result.toString());
 //                        User user = (User) result.getData();        // convert fail
 
-                        iView.onLoginResult(result);
+                        iView.onSignResult(result.toString());
 
                         String newStr = result.getData().toString().replace("null", "unknown");
                         MyLog.i(TAG, newStr);
@@ -134,7 +154,7 @@ public class LoginPresenter implements ILoginPresenter {
                             User data = gson.fromJson(user.body().getData().toString(), User.class);
                             MyLog.i(LoginPresenter.this, data.toString());
                         }
-                        iView.onLoginResult(user.body());
+                        iView.onSignResult(user.body().toString());
                         if (user.errorBody() != null) {
                             MyLog.d(TAG, user.errorBody().toString());
                         }

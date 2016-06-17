@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.adapter.DailyAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.model.item.DailyItem;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.guangzhou.weiwong.accountbook.ui.SwipeRecyclerView;
@@ -135,6 +136,11 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
         }, 2000);
     }
 
+    @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+
+    }
+
     private void onAnimateCreate() {
         ViewCompat.animate(mTvTitle).alpha(1.0f).start();
         mRecyclerView.setItemAnimator(ItemAnimatorFactory.slidein());
@@ -207,11 +213,6 @@ public class DailyActivity extends BaseMvpActivity implements SwipeRecyclerView.
 
     }
 
-
-    @Override
-    protected IPresenter createPresenter() {
-        return null;
-    }
 
 /*
     @Override

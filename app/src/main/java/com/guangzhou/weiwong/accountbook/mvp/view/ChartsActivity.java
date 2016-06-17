@@ -1,5 +1,6 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,9 +15,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,49 +49,72 @@ public class ChartsActivity extends BaseMvpActivity {
             }
         });
 
-        viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                switch (position) {
-                    case 0:
-                        return new ColumnChartFragment();
-                    case 1:
-                        return new LineChartFragment();
-                    case 2:
-                        return new PieChartFragment();
-                    default:
-                        return new LineChartFragment();
-                }
-            }
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(new ColumnChartFragment());
+        fragments.add(new LineChartFragment());
+        fragments.add(new PieChartFragment());
+        MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getFragmentManager());
+        myFragmentPagerAdapter.setList(fragments);
 
-            @Override
-            public int getCount() {
-                return 3;
-            }
+        if (viewPager.getAdapter() == null) {
+            viewPager.setAdapter(myFragmentPagerAdapter);
 
-            @Override
-            public CharSequence getPageTitle(int position) {
-                switch (position) {
-                    case 0:
-                        return "柱状图";
-                    case 1:
-                        return "折线图";
-                    case 2:
-                        return "饼状图";
-                    default:
-                        return "统计图";
-                }
-            }
-        });
+            tabLayout.setupWithViewPager(viewPager);
+        }
 
-        tabLayout.setupWithViewPager(viewPager);
 
         createCircularFloatingActionMenu();
     }
 
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragments;
+
+        public MyFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void setList(List<Fragment> fragments) {
+            this.fragments = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+//            switch (position) {
+//                case 0:
+//                    return new ColumnChartFragment();
+//                case 1:
+//                    return new LineChartFragment();
+//                case 2:
+//                    return new PieChartFragment();
+//                default:
+//                    return new LineChartFragment();
+//            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "柱状图";
+                case 1:
+                    return "折线图";
+                case 2:
+                    return "饼状图";
+                default:
+                    return "统计图";
+            }
+        }
+    }
+
     @Override
-    protected IPresenter createPresenter() {
-        return null;
+    protected void setupActivityComponent(AppComponent appComponent) {
+
     }
 
     com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton;

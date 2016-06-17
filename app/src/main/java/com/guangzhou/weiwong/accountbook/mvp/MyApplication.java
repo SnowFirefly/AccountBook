@@ -52,7 +52,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Bugtags.start("ae096999d2c3b5bdae9befcaa3e4e4fd", this, Bugtags.BTGInvocationEventShake);
+//        Bugtags.start("ae096999d2c3b5bdae9befcaa3e4e4fd", this, Bugtags.BTGInvocationEventShake);
+        
 //        LeakCanary.install(this);
 //        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
 //        int heapSize = manager.getMemoryClass();

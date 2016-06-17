@@ -9,8 +9,12 @@ import android.view.MotionEvent;
 import com.bugtags.library.Bugtags;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
+import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerUploadComponent;
 import com.guangzhou.weiwong.accountbook.mvp.MyApplication;
+import com.guangzhou.weiwong.accountbook.mvp.model.IUploadModel;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IPresenter;
+
+import javax.inject.Inject;
 
 /**
  * Created by Tower on 2016/4/20.
@@ -22,11 +26,10 @@ public abstract class BaseMvpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setupActivityComponent(MyApplication.get(this).getAppComponent());
         setupActivityComponent(MyApplication.getAppComponent());
+
     }
 
-    protected void setupActivityComponent(AppComponent appComponent){}
-
-    protected  IPresenter createPresenter(){return null;}
+    protected abstract void setupActivityComponent(AppComponent appComponent);
 
     @Override
     protected void onStart() {

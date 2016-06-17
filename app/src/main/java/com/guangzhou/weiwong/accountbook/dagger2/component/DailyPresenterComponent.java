@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = DailyPresenterModule.class)
 public interface DailyPresenterComponent {
-    @Inject
     void inject(DailyActivity dailyActivity);
 
     IDailyPresenter iDailyPresenter();

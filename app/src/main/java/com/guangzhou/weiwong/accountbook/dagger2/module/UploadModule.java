@@ -14,9 +14,11 @@ import dagger.Provides;
 @Module
 public class UploadModule {
 
+    public UploadModule(){}
+
     @ActivityScope
     @Provides
-    UploadModel provideUploadModel(){
+    IUploadModel provideUploadModel(){
         return new UploadModel();
     }
 }

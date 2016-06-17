@@ -14,15 +14,21 @@ import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,31 +44,40 @@ import com.guangzhou.weiwong.accountbook.mvp.model.Network;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.ILoginPresenter;
 import com.guangzhou.weiwong.accountbook.utils.BlurUtil;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseMvpActivity implements IView{
+public class LoginActivity extends BaseMvpActivity implements IView {
     private final String TAG = getClass().getName();
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.et_user) TextInputEditText mEtUser;
     @Bind(R.id.et_pw) TextInputEditText mEtPw;
     @Bind(R.id.ll_login) LinearLayout mLlLogin;
+    @Bind(R.id.til_user) TextInputLayout mTilUser;
+    @Bind(R.id.til_pw) TextInputLayout mTilPw;
+    @Bind(R.id.iv_visibility) ImageView mIvVisibility;
+    private boolean isVisibility = false;
 
     @Inject
     Network network;
-    @Inject ILoginPresenter iLoginPresenter;
+    @Inject
+    ILoginPresenter iLoginPresenter;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
-        super.setupActivityComponent(appComponent);
+//        super.setupActivityComponent(appComponent);
         DaggerLoginPresenterComponent.builder()
                 .appComponent(appComponent)
-//                .loginPresenterModule(new LoginPresenterModule(this))
                 .build()
                 .inject(this);
+        if (iLoginPresenter != null)
         iLoginPresenter.onAttach(this);
     }
 
@@ -70,20 +85,19 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.i(TAG, "onCreate: " + "before bind");
+        MyLog.i(TAG, "onCreate: " + "before bind");
         ButterKnife.bind(this);
-        Log.i(TAG, "onCreate: " + "after bind");
-//        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        MyLog.i(TAG, "onCreate: " + "after bind");
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startRegisterActivity(view);
             }
         });
-        Log.i(TAG, "onCreate: " + "before get ActivityManager");
+        MyLog.i(TAG, "onCreate: " + "before get ActivityManager");
         ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         int heapSize = manager.getMemoryClass();
-        Log.i(TAG, "heapSize: " + heapSize + "MB");
+        MyLog.i(TAG, "heapSize: " + heapSize + "MB");
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -93,8 +107,40 @@ public class LoginActivity extends BaseMvpActivity implements IView{
             }
         }, 100);
 
-        iLoginPresenter.testLogin("wong", "123");
-        Log.i(TAG, "onCreate: " + "end");
+        mEtUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {mTilUser.setErrorEnabled(false);}
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        mEtPw.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) mTilPw.setErrorEnabled(false);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        mIvVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isVisibility) {
+                    mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_white_24dp));
+                } else {
+                    mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_grey600_24dp));
+                }
+                isVisibility = !isVisibility;
+            }
+        });
+        MyLog.i(TAG, "onCreate: " + "end");
     }
 
     @Override
@@ -109,30 +155,84 @@ public class LoginActivity extends BaseMvpActivity implements IView{
     }
 
     public void login(View view){
+        iLoginPresenter.login(mEtUser.getText().toString(), mEtPw.getText().toString());
         if (checkFormat(mEtUser.getText().toString(), mEtPw.getText().toString())) {
-            iLoginPresenter.login(mEtUser.getText().toString(), mEtPw.getText().toString());
         } else {
-            Snackbar.make(view, "Username and password cannot be null.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            startActivity(new Intent(this, MainActivity.class));
-
+//            startActivity(new Intent(this, MainActivity.class));
+//            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
         }
         Log.d(TAG, "login()");
     }
 
     private boolean checkFormat(String userName, String password){
-        if (userName == null || password == null || userName.equals("") || password.equals(""))
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
+            if (TextUtils.isEmpty(userName)) {
+                mTilUser.setError("邮箱不能为空");
+            }
+            if (TextUtils.isEmpty(password)) {
+                mTilPw.setError("密码不能为空");
+            }
             return false;
+        }/* else if (!validateEmail(userName)) {
+            mTilUser.setError("邮箱格式错误");
+            return false;
+        } else if (!validatePassword(password)) {
+            mTilPw.setError("密码长度至少为6个字符");
+            return false;
+        }*/
+        mTilUser.setErrorEnabled(false);
+        mTilPw.setErrorEnabled(false);
         return true;
     }
 
-    @Override
-    public void onLoginResult(Result result) {
-        Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show();
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
+    private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private Matcher matcher;
+
+    public boolean validateEmail(String email) {
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public boolean validatePassword(String password) {
+        return password.length() > 5;
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     @Override
-    public void onRegisterResult(Result result) {
+    public void onSignResult(String resultMsg) {
+        Toast.makeText(this, resultMsg, Toast.LENGTH_LONG).show();
+        circularBtn.setProgress(100);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+            }
+        }, 700);
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+        circularBtn.setProgress(-1);
+        Snackbar.make(mFab, errorMsg, Snackbar.LENGTH_LONG)      // "Username and password cannot be null."
+                .setAction("Action", null).show();
+    }
+
+    @Override
+    public <T> void onLoadResult(int type, T bean) {
+
+    }
+
+    @Override
+    public void onCommitResult(String resultMsg) {
 
     }
 
@@ -148,24 +248,22 @@ public class LoginActivity extends BaseMvpActivity implements IView{
         }
     }
 
+    private CircularProgressButton circularBtn;
     private void showProgressBtn(){
-        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.cpb_login);
-        circularButton1.setIndeterminateProgressMode(true);
-        circularButton1.setOnClickListener(new View.OnClickListener() {
+        circularBtn = (CircularProgressButton) findViewById(R.id.cpb_login);
+        circularBtn.setIndeterminateProgressMode(true);
+        circularBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (circularButton1.getProgress() == 0) {
-                    circularButton1.setProgress(50);
-                } else if (circularButton1.getProgress() == 100) {   // -1
-                    circularButton1.setProgress(0);
-                } else {
-                    circularButton1.setProgress(100);        // -1
-                    circularButton1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            login(v);
-                        }
-                    });
+                if (circularBtn.getProgress() == 0) {
+                    if (checkFormat(mEtUser.getText().toString(), mEtPw.getText().toString())) {
+                        circularBtn.setProgress(50);
+                        login(v);
+                    }
+                } else if (circularBtn.getProgress() == 100) {   // -1
+                    circularBtn.setProgress(0);
+                } else if (circularBtn.getProgress() == -1){
+                    circularBtn.setProgress(0);
                 }
 
                 /*if (circularButton1.getProgress() == 0) {
@@ -173,13 +271,6 @@ public class LoginActivity extends BaseMvpActivity implements IView{
                 } else {
                     circularButton1.setProgress(0);
                 }*/
-
-                /*if (circularButton1.getProgress() == 0) {
-                    circularButton1.setProgress(100);   // -1
-                } else {
-                    circularButton1.setProgress(0);
-                }*/
-
             }
         });
     }

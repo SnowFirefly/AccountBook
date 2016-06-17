@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = GroupPresenterModule.class)
 public interface GroupPresenterComponent {
-    @Inject
     void inject(GroupActivity groupActivity);
 
     IGroupPresenter iGroupPresenter();

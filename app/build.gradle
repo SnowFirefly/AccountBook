@@ -19,6 +19,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/java-gen']
+        }
+    }
 }
 
 dependencies {
@@ -59,6 +64,7 @@ dependencies {
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'de.greenrobot:greendao:2.1.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'  // 未使用的图表
 
     compile 'com.bugtags.library:bugtags-lib:1.2.5'     // 崩溃信息收集

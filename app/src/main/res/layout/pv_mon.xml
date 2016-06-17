@@ -5,7 +5,6 @@
     android:layout_height="@dimen/view_paster_height"
     android:padding="@dimen/view_paster_padding"
     android:clickable="true"
-    android:onClick="onClickMon"
     android:background="@drawable/cyan"
     android:textColor="@android:color/black"
     android:textSize="25sp" />

@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = ProfilePresenterModule.class)
 public interface ProfilePresenterComponent {
-    @Inject
     void inject(ProfileActivity profileActivity);
 
     IProfilePresenter iProfilePresenter();

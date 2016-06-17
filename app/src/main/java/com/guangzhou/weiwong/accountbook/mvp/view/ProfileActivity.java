@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,6 +51,11 @@ public class ProfileActivity extends BaseMvpActivity {
                 count++;
             }
         });
+    }
+
+    @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+
     }
 
     int count = 0;

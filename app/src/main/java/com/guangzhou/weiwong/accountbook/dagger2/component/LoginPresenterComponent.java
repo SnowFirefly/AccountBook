@@ -16,5 +16,5 @@ import dagger.Component;
 public interface LoginPresenterComponent {
     void inject(LoginActivity loginActivity);
 
-    ILoginPresenter presenter();
+    ILoginPresenter iLoginPresenter();
 }

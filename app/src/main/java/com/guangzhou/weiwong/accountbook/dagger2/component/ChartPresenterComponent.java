@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = ChartPresenterModule.class)
 public interface ChartPresenterComponent {
-    @Inject
     void inject(ChartsActivity chartsActivity);
 
     IChartPresenter iChartPresenter();

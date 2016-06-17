@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--<item
+        android:id="@+id/action_date_picker"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_expand_more_white_36dp"
+        android:title="@string/action_date_picker"
+        app:showAsAction="always" />-->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

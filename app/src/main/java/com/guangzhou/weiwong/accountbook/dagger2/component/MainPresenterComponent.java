@@ -15,7 +15,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = MainPresenterModule.class)
 public interface MainPresenterComponent {
-    @Inject
     void inject(MainActivity mainActivity);
 
     IMainPresenter iMainPresenter();

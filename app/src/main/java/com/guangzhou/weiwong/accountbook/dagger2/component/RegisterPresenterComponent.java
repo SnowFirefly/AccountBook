@@ -15,7 +15,7 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = RegisterPresenterModule.class)
 public interface RegisterPresenterComponent {
-    @Inject void inject(RegisterActivity registerActivity);
+    void inject(RegisterActivity registerActivity);
 
     IRegisterPresenter iRegisterPresenter();
 }

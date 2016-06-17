@@ -33,6 +33,10 @@ public interface ApiService {
     @POST("api.php?method=userGroupCreate")
     Observable<Result> createGroup(@Field("data") String jsonString);
 
+    @FormUrlEncoded
+    @POST("api.php?method=")
+    Observable<Result> getCurWeekData(@Field("data") String dataJson);
+
 }
 
 //    @POST("api.php?method=userRegister")

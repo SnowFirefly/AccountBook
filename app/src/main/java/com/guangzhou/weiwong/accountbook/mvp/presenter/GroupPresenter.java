@@ -35,4 +35,28 @@ public class GroupPresenter implements IGroupPresenter {
     public void onDetach() {
 
     }
+//    public void createGroup(String userName, String password, String groupName){
+//        Log.d(TAG, "createGroup()");
+//        Observable<Result> observable = network.createGroup(userName, password, groupName);
+//        observable.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subs  cribe(new Subscriber<Result>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Log.d(TAG, "onCompleted()");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d(TAG, "onError():" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Result result) {
+//                        Log.d(TAG, "onNext()");
+//                        Log.d(TAG, result.toString());
+//                        iView.onRegisterResult(result);
+//                    }
+//                });
+//    }
 }

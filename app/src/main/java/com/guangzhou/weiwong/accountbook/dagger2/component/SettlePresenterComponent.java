@@ -16,7 +16,6 @@ import dagger.Component;
 @ActivityScope
 @Component (modules = SettlePresenterModule.class)
 public interface SettlePresenterComponent {
-    @Inject
     void inject(SettleActivity settleActivity);
 
     ISettlePresenter iSettlePresenter();

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.mvp.MyApplication;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
+import com.wong.greendao.DBHelper;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -26,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
                 .setDirection(Shimmer.ANIMATION_DIRECTION_RTL)
                 .setAnimatorListener(new Animator.AnimatorListener() {
                 });*/
+
+        DBHelper.init(this);    // 此处初始化数据库操作类
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override

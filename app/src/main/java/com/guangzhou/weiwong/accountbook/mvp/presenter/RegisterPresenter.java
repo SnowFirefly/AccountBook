@@ -49,7 +49,7 @@ public class RegisterPresenter implements IRegisterPresenter {
                     public void onNext(Result result) {
                         MyLog.d(TAG, "onNext()");
                         MyLog.d(TAG, result.toString());
-                        iView.onRegisterResult(result);
+                        iView.onSignResult(result.toString());
                     }
                 });
     }

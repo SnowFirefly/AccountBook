@@ -18,7 +18,24 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:text="Date"/>
+            <Button
+                android:id="@+id/btn_expend"
+                android:layout_margin="0dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/ic_expand_more_white_36dp"/>
+        </android.support.v7.widget.Toolbar>
+
     </android.support.design.widget.AppBarLayout>
 
     <include

@@ -1,6 +1,7 @@
 package com.guangzhou.weiwong.accountbook.dagger2.module;
 
 import com.guangzhou.weiwong.accountbook.mvp.model.ApiService;
+import com.guangzhou.weiwong.accountbook.utils.NewGsonConverterFactory;
 
 import javax.inject.Singleton;
 
@@ -21,7 +22,8 @@ public class ApiServiceModule {
     ApiService provideApiService(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.book4account.com/")
-                .addConverterFactory(GsonConverterFactory.create())
+                // 注册自定义的工厂类（使Retrofit也可以抛出服务器约定异常）
+                .addConverterFactory(NewGsonConverterFactory.create())
                 // for RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
