@@ -21,19 +21,20 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             >
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="@android:color/white"
-            android:text="2016/6/1"/>
+            android:text="日期"/>
             <Button
                 android:id="@+id/btn_expend"
                 android:layout_margin="0dp"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:onClick="onShowPopup"
+
                 android:background="@drawable/ic_expand_more_white_36dp"/>
         </android.support.v7.widget.Toolbar>
 

@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugtags.library.core.ui.rounded.CircleImageView;
@@ -31,9 +32,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerMainPresenterComponent;
-import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IMainPresenter;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.MainPresenter;
 import com.guangzhou.weiwong.accountbook.mvp.view.BaseMvpActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.ChartsActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.DailyActivity;
@@ -45,11 +44,11 @@ import com.guangzhou.weiwong.accountbook.mvp.view.SettleActivity;
 import com.guangzhou.weiwong.accountbook.ui.PasterView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.guangzhou.weiwong.accountbook.utils.DialogUtil;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
+import com.guangzhou.weiwong.accountbook.utils.SpUtil;
+import com.guangzhou.weiwong.accountbook.utils.TimeUtil;
 import com.guangzhou.weiwong.accountbook.utils.WindowUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -66,9 +65,13 @@ public class MainActivity extends BaseMvpActivity
     private final String TAG = "MainActivity";
     public static final String WEEKDAY = "WEEKDAY";
     @Inject IMainPresenter iMainPresenter;
-    private Typeface mTypeface;
     private WeekClickListener weekClickListener;
     private MyHandler myHandler;
+
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.fab) FloatingActionButton fab;
+    @Bind(R.id.drawer_layout) DrawerLayout drawer;
+    @Bind(R.id.nav_view) NavigationView navigationView;
 
     @Bind(R.id.vs_mon) ViewStub vs_mon;
     @Bind(R.id.vs_tue) ViewStub vs_tue;
@@ -77,8 +80,7 @@ public class MainActivity extends BaseMvpActivity
     @Bind(R.id.vs_fri) ViewStub vs_fri;
     @Bind(R.id.vs_sat) ViewStub vs_sat;
     @Bind(R.id.vs_sun) ViewStub vs_sun;
-    PasterView mPvMon, mPvTue, mPvWed, mPvThu, mPvFri, mPvSat, mPvSun;
-    @Bind(R.id.fab) FloatingActionButton fab;
+    private PasterView mPvMon, mPvTue, mPvWed, mPvThu, mPvFri, mPvSat, mPvSun;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -92,52 +94,9 @@ public class MainActivity extends BaseMvpActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                requestData();
-            }
-        });
-
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View view = navigationView.getHeaderView(0);
-        CircleImageView mCiHead = (CircleImageView) view.findViewById(R.id.ci_head);
-        mCiHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
-            }
-        });
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "handler");
-                mTypeface = Typeface.createFromAsset(getAssets(), "fangzheng_jinglei.ttf");
-                mPvMon.setContent("星期一\nLuffy支出20\nSix支出25", mTypeface);
-                mPvTue.setContent("星期二\nLuffy支出10\nSix支出23", mTypeface);
-                mPvWed.setContent("星期三\nLuffy支出20\nSix支出21", mTypeface);
-                mPvThu.setContent("星期四\nLuffy支出30\nSix支出24", mTypeface);
-                mPvFri.setContent("星期五\nLuffy支出24\nSix支出25", mTypeface);
-                mPvSat.setContent("星期六\nLuffy支出21\nSix支出35", mTypeface);
-                mPvSun.setContent("星期日\nLuffy支出20\nSix支出15", mTypeface);
-            }
-        }, 4000);
+        init();
+        createMenu();
+        weekClickListener = new WeekClickListener();
         myHandler = new MyHandler(this);
         myHandler.sendEmptyMessageDelayed(1, 100);
         myHandler.sendEmptyMessageDelayed(2, 500);
@@ -146,10 +105,44 @@ public class MainActivity extends BaseMvpActivity
         myHandler.sendEmptyMessageDelayed(5, 1800);
         myHandler.sendEmptyMessageDelayed(6, 2500);
         myHandler.sendEmptyMessageDelayed(7, 3000);
+    }
 
-        createMenu();
-        weekClickListener = new WeekClickListener();
+    private void init() {
+        setSupportActionBar(toolbar);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestData();
+            }
+        });
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View view = navigationView.getHeaderView(0);
+        CircleImageView mCiHead = (CircleImageView) view.findViewById(R.id.ci_head);
+        mCiHead.setImageDrawable(getResources().getDrawable(R.drawable.icon_head0));
+        mCiHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 700);
+            }
+        });
+        ((TextView) view.findViewById(R.id.tv_name)).setText(SpUtil.getStringPreference(this,
+                SpUtil.KEY_USER_NAME, "Leon"));
+        ((TextView) view.findViewById(R.id.tv_email)).setText(SpUtil.getStringPreference(this,
+                SpUtil.KEY_USER_EMAIL, "我的共享账本"));
     }
 
     private int[] menuItemIDs;      // 分组的菜单项ID
@@ -171,7 +164,7 @@ public class MainActivity extends BaseMvpActivity
     private void requestData() {
         WindowUtil.showPopupWindow(MainActivity.this);
         iMainPresenter.getGroupData();
-        iMainPresenter.getCurWeekData(new Date(116, 6, 1), new Date());
+        iMainPresenter.getCurWeekData(TimeUtil.getWeekDay(1), TimeUtil.getWeekDay(7));
     }
 
     /**
@@ -191,55 +184,55 @@ public class MainActivity extends BaseMvpActivity
             switch (msg.what){
                 case 1:
                     if (mainActivity.mPvMon == null) {
-                    mainActivity.mPvMon = (PasterView) mainActivity.vs_mon.inflate();
-                    mainActivity.mPvMon.setOnClickListener(mainActivity.weekClickListener);
+                        mainActivity.mPvMon = (PasterView) mainActivity.vs_mon.inflate();
                     }
                     mainActivity.mPvMon.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 2:
                     if (mainActivity.mPvTue == null) {
                         mainActivity.mPvTue = (PasterView) mainActivity.vs_tue.inflate();
-                        mainActivity.mPvTue.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvTue.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 3:
                     if (mainActivity.mPvWed == null) {
                         mainActivity.mPvWed = (PasterView) mainActivity.vs_wed.inflate();
-                        mainActivity.mPvWed.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvWed.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 4:
                     if (mainActivity.mPvThu == null) {
                         mainActivity.mPvThu = (PasterView) mainActivity.vs_thu.inflate();
-                        mainActivity.mPvThu.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvThu.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 5:
                     if (mainActivity.mPvFri == null) {
                         mainActivity.mPvFri = (PasterView) mainActivity.vs_fri.inflate();
-                        mainActivity.mPvFri.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvFri.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 6:
                     if (mainActivity.mPvSat == null) {
                         mainActivity.mPvSat = (PasterView) mainActivity.vs_sat.inflate();
-                        mainActivity.mPvSat.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvSat.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     break;
                 case 7:
                     if (mainActivity.mPvSun == null) {
                         mainActivity.mPvSun = (PasterView) mainActivity.vs_sun.inflate();
-                        mainActivity.mPvSun.setOnClickListener(mainActivity.weekClickListener);
                     }
                     mainActivity.mPvSun.startAnimation(AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in_top));
                     mainActivity.myHandler.sendEmptyMessageDelayed(8, 1000);
                     break;
                 case 8:
+                    mainActivity.mPvMon.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvTue.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvWed.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvThu.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvFri.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvSat.setOnClickListener(mainActivity.weekClickListener);
+                    mainActivity.mPvSun.setOnClickListener(mainActivity.weekClickListener);
                     mainActivity.requestData();         // 请求数据
                     break;
                 default:    break;
@@ -272,7 +265,12 @@ public class MainActivity extends BaseMvpActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            DialogUtil.dialogShow(this, DialogUtil.FLIPH, "退出共享账本？", new DialogUtil.DialogClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.super.onBackPressed();
+                }
+            });
         }
     }
 
@@ -326,11 +324,12 @@ public class MainActivity extends BaseMvpActivity
         } else if (id == R.id.nav_private) {
 
         } else if (id == R.id.nav_groups) {
-
+            Toast.makeText(this, "敬请期待！", Toast.LENGTH_LONG).show();
         }
 
         else if (id == 0x666) {
             item.setChecked(true);
+            Toast.makeText(this, "敬请期待！", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -367,16 +366,17 @@ public class MainActivity extends BaseMvpActivity
     @Override
     public void onError(String errorMsg) {
         WindowUtil.hidePopupWindow();
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         final Snackbar snackbar = Snackbar.make(fab, errorMsg, Snackbar.LENGTH_SHORT);
         snackbar.setAction("ok", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iMainPresenter.getLocalData(new Date(116, 6, 1), new Date());
+                iMainPresenter.getLocalData(TimeUtil.getWeekDay(1), TimeUtil.getWeekDay(7));
                 snackbar.dismiss();
             }
         });
         snackbar.show();
+        iMainPresenter.getLocalData(TimeUtil.getWeekDay(1), TimeUtil.getEndOfDay(TimeUtil.getWeekDay(7)));
     }
 
     @Override
@@ -385,7 +385,15 @@ public class MainActivity extends BaseMvpActivity
         MyLog.i(this, "type: " + type);
         switch (type) {
             case CUR_WEEK_DATA:
-
+                List<String> weekData = (List<String>) bean;
+                Typeface mTypeface = MyApplication.getTypeface();
+                mPvMon.setContent("星期一" + weekData.get(0), mTypeface);
+                mPvTue.setContent("星期二" + weekData.get(1), mTypeface);
+                mPvWed.setContent("星期三" + weekData.get(2), mTypeface);
+                mPvThu.setContent("星期四" + weekData.get(3), mTypeface);
+                mPvFri.setContent("星期五" + weekData.get(4), mTypeface);
+                mPvSat.setContent("星期六" + weekData.get(5), mTypeface);
+                mPvSun.setContent("星期日" + weekData.get(6), mTypeface);
                 break;
             case GROUP_DATA:
 
@@ -395,127 +403,4 @@ public class MainActivity extends BaseMvpActivity
 
     @Override
     public void onCommitResult(String resultMsg) {}
-
-
-
-
-    String[] mMonths = {"Jan", "Feb", "Mar", "April", "May", "June", "July",
-            "Aug", "Sept", "Oct", "Nov", "Dec"};
-    public void testChart(View view){
-        // 自定义字体
-        mTf = Typeface.createFromAsset(getAssets(), "huawen_xingkai.ttf");
-        // 生产数据
-        LineData data = getData(36, 100);
-//        mCharts[0] = (LineChart) findViewById(R.id.lc_01);
-        for (int i = 0; i < mCharts.length; i++) {
-            // add some transparency to the color with "& 0x90FFFFFF"
-            setupChart(mCharts[i], data, mColors[i % mColors.length]);
-        }
-        startActivity(new Intent(this, PasterActivity.class));
-    }
-
-    LineChart[] mCharts = new LineChart[1]; // 4条数据
-    Typeface mTf; // 自定义显示字体
-    int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//
-            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) }; // 自定义颜色
-    // 设置显示的样式
-    void setupChart(LineChart chart, LineData data, int color) {
-        // if enabled, the chart will always start at zero on the y-axis
-//        chart.setStartAtZero(true);
-
-        // disable the drawing of values into the chart
-//        chart.setDrawYValues(false);
-
-//        chart.setDrawBorder(false);
-
-        // no description text
-        chart.setDescription("");// 数据描述
-        // 如果没有数据的时候，会显示这个，类似listview的emtpyview
-        chart.setNoDataTextDescription("You need to provide data for the chart.");
-
-        // enable / disable grid lines
-//        chart.setDrawVerticalGrid(false); // 是否显示水平的表格
-        // mChart.setDrawHorizontalGrid(false);
-        //
-        // enable / disable grid background
-        chart.setDrawGridBackground(false); // 是否显示表格颜色
-//        chart.setGridColor(Color.WHITE & 0x70FFFFFF); // 表格的的颜色，在这里是是给颜色设置一个透明度
-//        chart.setGridWidth(1.25f);// 表格线的线宽
-
-        // enable touch gestures
-        chart.setTouchEnabled(true); // 设置是否可以触摸
-
-        // enable scaling and dragging
-        chart.setDragEnabled(true);// 是否可以拖拽
-        chart.setScaleEnabled(true);// 是否可以缩放
-
-        // if disabled, scaling can be done on x- and y-axis separately
-        chart.setPinchZoom(false);//
-
-        chart.setBackgroundColor(color);// 设置背景
-
-//        chart.setValueTypeface(mTf);// 设置字体
-
-        // add data
-        chart.setData(data); // 设置数据
-
-        // get the legend (only possible after setting data)
-        Legend l = chart.getLegend(); // 设置标示，就是那个一组y的value的
-
-        // modify the legend ...
-        // l.setPosition(LegendPosition.LEFT_OF_CHART);
-        l.setForm(Legend.LegendForm.CIRCLE);// 样式
-        l.setFormSize(6f);// 字体
-        l.setTextColor(Color.WHITE);// 颜色
-        l.setTypeface(mTf);// 字体
-
-//        YLabels y = chart.getYLabels(); // y轴的标示
-//        y.setTextColor(Color.WHITE);
-//        y.setTypeface(mTf);
-//        y.setLabelCount(4); // y轴上的标签的显示的个数
-
-//        XLabels x = chart.getXLabels(); // x轴显示的标签
-//        x.setTextColor(Color.WHITE);
-//        x.setTypeface(mTf);
-
-        // animate calls invalidate()...
-        chart.animateX(2500); // 立即执行的动画,x轴
-    }
-
-    // 生成一个数据，
-    LineData getData(int count, float range) {
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            // x轴显示的数据，这里默认使用数字下标显示
-            xVals.add(mMonths[i % 12]);
-        }
-
-        // y轴的数据
-        List<Entry> yVals = new ArrayList<Entry>();
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range) + 3;
-            yVals.add(new Entry(val, i));
-        }
-
-        // create a dataset and give it a type
-        // y轴的数据集合
-        LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-
-        set1.setLineWidth(1.75f); // 线宽
-        set1.setCircleSize(3f);// 显示的圆形大小
-        set1.setColor(Color.WHITE);// 显示颜色
-        set1.setCircleColor(Color.WHITE);// 圆形的颜色
-        set1.setHighLightColor(Color.WHITE); // 高亮的线的颜色
-
-        List<com.github.mikephil.charting.interfaces.datasets.ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set1); // add the datasets
-
-        // create a data object with the datasets
-        LineData data = new LineData(xVals, dataSets);
-
-        return data;
-    }
-
 }

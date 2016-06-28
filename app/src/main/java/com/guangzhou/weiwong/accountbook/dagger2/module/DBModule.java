@@ -1,10 +1,8 @@
 package com.guangzhou.weiwong.accountbook.dagger2.module;
 
 import com.guangzhou.weiwong.accountbook.dagger2.ActivityScope;
-import com.guangzhou.weiwong.accountbook.mvp.DBModel;
+import com.guangzhou.weiwong.accountbook.mvp.model.DBModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IDBModel;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;

@@ -1,6 +1,9 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +23,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,11 +32,11 @@ import com.dd.CircularProgressButton;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerRegisterPresenterComponent;
-import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IRegisterPresenter;
-import com.guangzhou.weiwong.accountbook.mvp.presenter.RegisterPresenter;
 import com.guangzhou.weiwong.accountbook.utils.AnimUtil;
+import com.guangzhou.weiwong.accountbook.utils.BlurUtil;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
+import com.guangzhou.weiwong.accountbook.utils.SpUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,12 +51,9 @@ public class RegisterActivity extends BaseMvpActivity implements IView {
     @Inject IRegisterPresenter iRegisterPresenter;
 
     @Bind(R.id.fab_circle) FloatingActionButton mFabCircle;
-    @Bind(R.id.ll_info)
-    LinearLayout mLlInfo;
-    @Bind(R.id.iv_close)
-    ImageView mIvClose;
-    @Bind(R.id.rl_container)
-    RelativeLayout mRlContainer;
+    @Bind(R.id.ll_info) LinearLayout mLlInfo;
+    @Bind(R.id.iv_close) ImageView mIvClose;
+    @Bind(R.id.rl_container) RelativeLayout mRlContainer;
 
     @Bind(R.id.et_user) TextInputEditText mEtUser;
     @Bind(R.id.et_email) TextInputEditText mEtEmail;
@@ -150,8 +149,21 @@ public class RegisterActivity extends BaseMvpActivity implements IView {
         } else {
             initViews();
         }
-        MyLog.d(TAG, "onCreate done");
+
         showProgressBtn();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 背景模糊（毛玻璃效果）
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_reg);
+                Bitmap newBitmap = BlurUtil.fastblur(RegisterActivity.this, bitmap, 12);
+                mRlContainer.setBackground(new BitmapDrawable(newBitmap));
+            }
+        }, 1500);
+        MyLog.d(TAG, "onCreate done");
     }
 
     // 初始化视图
@@ -179,11 +191,11 @@ public class RegisterActivity extends BaseMvpActivity implements IView {
                         if (isVisibility) {
                             mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                             mEtConfirmPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_white_24dp));
+                            mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_visibility_off_grey600_24dp));
                         } else {
                             mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                             mEtConfirmPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_grey600_24dp));
+                            mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_visibility_grey600_24dp));
                         }
                         isVisibility = !isVisibility;
                     }
@@ -312,6 +324,15 @@ public class RegisterActivity extends BaseMvpActivity implements IView {
     public void onSignResult(String resultMsg) {
         Toast.makeText(this, resultMsg, Toast.LENGTH_LONG).show();
         circularBtn.setProgress(100);
+        SpUtil.putStringPreference(this, SpUtil.KEY_USER_NAME, user);
+        SpUtil.putStringPreference(this, SpUtil.KEY_USER_EMAIL, email);
+        SpUtil.putStringPreference(this, SpUtil.KEY_USER_PASSWORD, pw);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backActivity(null);
+            }
+        }, 700);
     }
 
     @Override

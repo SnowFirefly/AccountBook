@@ -1,7 +1,5 @@
 package com.guangzhou.weiwong.accountbook.mvp.model;
 
-import android.util.Log;
-
 import com.guangzhou.weiwong.accountbook.mvp.MyApplication;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;

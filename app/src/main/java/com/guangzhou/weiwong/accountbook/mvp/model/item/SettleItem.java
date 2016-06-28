@@ -24,7 +24,7 @@ public class SettleItem {
     }
 
     public static List<SettleItem> getFakeItemsFirst(){
-        String[] month = { "16\n年\n5\n月", "16\n年\n6\n月", "16\n年\n7\n月", "16\n年\n8\n月" };
+        String[] month = { "16\n年\n6\n月", "16\n年\n5\n月", "16\n年\n4\n月", "16\n年\n3\n月" };
         String detail = "结算详情\n" +
                 "总支出： 700元 平均350元\n" +
                 "Luffy： 支出300元 差额50元 结算情况：未结算\n" +

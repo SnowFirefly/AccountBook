@@ -4,6 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name=".mvp.MyApplication"
@@ -26,16 +34,16 @@
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".mvp.view.PasterActivity"
-            android:label="@string/title_activity_paster"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".mvp.view.ChartsActivity"
-            android:label="@string/title_activity_charts"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.view.DailyActivity"
-            android:label="@string/title_activity_daily"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.view.ProfileActivity"
@@ -43,11 +51,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.view.GroupActivity"
-            android:label="@string/title_activity_group"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.view.SettleActivity"
-            android:label="@string/title_activity_settle"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".mvp.view.SplashActivity"
             android:label="@string/title_activity_splash"

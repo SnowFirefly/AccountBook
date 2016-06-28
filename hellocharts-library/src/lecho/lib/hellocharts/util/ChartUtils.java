@@ -2,6 +2,7 @@ package lecho.lib.hellocharts.util;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.rtp.RtpStream;
 import android.util.TypedValue;
 
 public abstract class ChartUtils {
@@ -67,4 +68,31 @@ public abstract class ChartUtils {
         return Color.argb(alpha, Color.red(tempColor), Color.green(tempColor), Color.blue(tempColor));
     }
 
+    public static int pickDayColor(int day) {
+        if (day == 0) return Color.WHITE;
+        return Color.parseColor("#009688");
+    }
+
+    public static int pickMonthColor(int month) {
+        if (0 < month && month <= 3) {
+            return Color.GREEN;
+        } else if (month <= 6) {
+            return Color.RED;
+        } else if (month <= 9) {
+            return Color.YELLOW;
+        } else if (month <= 12) {
+            return Color.LTGRAY;
+        } else {
+            return Color.WHITE;
+        }
+    }
+
+    public static int pickYearColor(int year) {
+        if (year == 0) return Color.WHITE;
+        return Color.parseColor("#009688");
+    }
+
+    public static int pickCateColor(int cate) {
+        return COLORS[cate % 4];
+    }
 }

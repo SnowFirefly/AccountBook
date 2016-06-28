@@ -174,7 +174,7 @@ public class ColumnChartRenderer extends AbstractChartRenderer {
     private void drawColumnsForSubcolumns(Canvas canvas) {
         final ColumnChartData data = dataProvider.getColumnChartData();
         final float columnWidth = calculateColumnWidth();
-        int columnIndex = 0;
+        int columnIndex = 0;        // tower change 0 to 1
         for (Column column : data.getColumns()) {
             processColumnForSubcolumns(canvas, column, columnWidth, columnIndex, MODE_DRAW);
             ++columnIndex;

@@ -2,6 +2,7 @@ package com.guangzhou.weiwong.accountbook.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Build;
@@ -79,5 +80,18 @@ public class ImageUtil {
             return size.x;
         }
         return display.getWidth();
+    }
+
+
+    public static int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        MyLog.i(TAG, "scale: " + scale);
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static int px2dp(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        System.out.print("scale: " + scale);
+        return (int) (pxValue / scale + 0.5f);
     }
 }

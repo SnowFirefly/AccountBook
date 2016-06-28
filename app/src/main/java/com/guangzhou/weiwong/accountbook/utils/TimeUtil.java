@@ -94,6 +94,15 @@ public class TimeUtil {
         return calendar.getTime();
     }
 
+    public static Date getNoonOfDay(Date date) {
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
     public static Date getEndOfDay(Date date) {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(date);

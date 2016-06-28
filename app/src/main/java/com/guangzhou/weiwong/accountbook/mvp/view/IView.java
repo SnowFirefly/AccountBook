@@ -1,14 +1,16 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
-import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
-
 /**
  * Created by Tower on 2016/4/18.
  */
 public interface IView {
     int GROUP_DATA = 0;
     int CUR_WEEK_DATA = 1;
-
+    int ONE_DAY_DATA = 2;
+    int DAILY_DATA = 3;
+    int STATISTIC_DATA = 4;
+    int PERSONAL_DATA = 5;
+    int TIME_RANGE = 6;
 
     void onSignResult(String resultMsg);        // 登录注册结果
 

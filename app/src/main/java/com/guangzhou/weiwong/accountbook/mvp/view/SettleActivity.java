@@ -114,13 +114,13 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
                     break;
                 case 1:
                     Toast.makeText(settleActivity, "UP", Toast.LENGTH_SHORT).show();
-                    settleActivity.mSettleAdapter.getmItems().add(new SettleItem("16\n年\n9\n月",
+                    settleActivity.mSettleAdapter.getmItems().add(new SettleItem("16\n年\n2\n月",
                             detail, R.drawable.icon_head0, "Six", R.drawable.btg_icon_priority_1_selected));
-                    settleActivity.mSettleAdapter.getmItems().add(new SettleItem("16\n年\n10\n月",
+                    settleActivity.mSettleAdapter.getmItems().add(new SettleItem("16\n年\n1\n月",
                             detail, R.drawable.icon_head0, "Six", R.drawable.btg_icon_priority_1_selected));
 
                     settleActivity.mSwipeRecyclerView.completeLoad();
-                    if(settleActivity.mSettleAdapter.getmItems().size()>6){
+                    if(settleActivity.mSettleAdapter.getmItems().size()>5){
                         settleActivity.mSwipeRecyclerView.completeAllLoad();
                     }
                     settleActivity.mSettleAdapter.notifyDataSetChanged();

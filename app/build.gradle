@@ -7,11 +7,15 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.guangzhou.weiwong.accountbook"
+        applicationId "com.guangzhou.tower.accountbook"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+//        ndk {
+//            // 设置支持的 SO 库构架
+//            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+//        }
     }
     buildTypes {
         release {
@@ -65,9 +69,10 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'de.greenrobot:greendao:2.1.0'
+    compile 'com.squareup:otto:+'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'  // 未使用的图表
 
-    compile 'com.bugtags.library:bugtags-lib:1.2.5'     // 崩溃信息收集
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'     // 崩溃信息收集
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'     // 内存溢出信息收集
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
 }

@@ -1,6 +1,6 @@
 package com.wong.greendao;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.dao.query.DeleteQuery;
@@ -81,7 +81,7 @@ public class TablePersonalDaoHelper implements MyDaoHelperInterface {
         }
         if (query == null) {
             query = queryBuilder.where(queryBuilder.and(TableRecordPersonalDao.Properties.Buy_time.ge(begin),
-                            TableRecordPersonalDao.Properties.Buy_time.le(end)))
+                            TableRecordPersonalDao.Properties.Buy_time.lt(end)))
                     .orderDesc(TableRecordPersonalDao.Properties.Buy_time)
                     .build();
             QueryBuilder.LOG_SQL = true;
@@ -98,7 +98,13 @@ public class TablePersonalDaoHelper implements MyDaoHelperInterface {
         if (personalDao == null) {
             return null;
         }
-        return personalDao.loadAll();
+//        return personalDao.loadAll();
+        Query query = queryBuilder
+                .orderDesc(TableRecordPersonalDao.Properties.Buy_time)
+                .build();
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
+        return query.list();
     }
 
     @Override

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AccountBook</string>
+    <string name="app_name">共享账本</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,14 +8,21 @@
 
     <string name="action_date_picker">DatePicker</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_charts">ChartsActivity</string>
+    <string name="title_activity_charts">统计图</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_daily">DailyActivity</string>
+    <string name="title_activity_daily">账目</string>
     <string name="title_activity_profile"></string>
-    <string name="title_activity_group">GroupActivity</string>
-    <string name="title_activity_settle">SettleActivity</string>
-    <string name="title_activity_paster">PasterActivity</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_group">分组</string>
+    <string name="title_activity_settle">结算</string>
+    <string name="title_activity_paster">记一记</string>
+    <string name="title_activity_splash">共享账本</string>
+
+    <!--消费种类-->
+    <string name="category_food">饮食</string>
+    <string name="category_daily">日用品</string>
+    <string name="category_digital">电子产品</string>
+    <string name="category_clothes">服饰</string>
+    <string name="category_other">其他</string>
 </resources>

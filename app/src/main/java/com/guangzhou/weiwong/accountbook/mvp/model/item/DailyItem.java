@@ -17,9 +17,10 @@ public class DailyItem {
     private String mWeek;
     private String mCategory;
     private String mDetail;
+    private long mTableId;      // 表记录的ID，便于修改
 
     public DailyItem(int mHeadImgId, String mName, float mMoney, int mTypeIconId,
-                     String mWeek, String mDate, String mDetail, String mCategory) {
+                     String mWeek, String mDate, String mDetail, String mCategory, long mTableId) {
         this.mHeadImgId = mHeadImgId;
         this.mName = mName;
         this.mMoney = mMoney;
@@ -28,6 +29,7 @@ public class DailyItem {
         this.mDate = mDate;
         this.mDetail = mDetail;
         this.mCategory = mCategory;
+        this.mTableId = mTableId;
     }
 
     public static List<DailyItem> getFakeItemsFirst(){
@@ -43,7 +45,7 @@ public class DailyItem {
         ArrayList<DailyItem> itemsList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             itemsList.add(new DailyItem(headId[i], name[i%3], 20.0f + 2,
-                    typeId[i%2], week[i], date[i], detail[i], "食物"));
+                    typeId[i%2], week[i], date[i], detail[i], "食物", 0));
         }
         return itemsList;
     }
@@ -78,5 +80,9 @@ public class DailyItem {
 
     public String getmName() {
         return mName;
+    }
+
+    public long getmTableId() {
+        return mTableId;
     }
 }

@@ -2,7 +2,7 @@ package com.guangzhou.weiwong.accountbook.mvp.model;
 
 import android.content.Context;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 /**

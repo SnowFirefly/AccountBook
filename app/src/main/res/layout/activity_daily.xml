@@ -25,17 +25,43 @@
             <TextView
                 android:id="@+id/tv_title_bar"
                 style="@android:style/TextAppearance.DeviceDefault.Large"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0"
                 android:text="每日一记"
                 android:textColor="@android:color/white"
                 tools:alpha="1"
                 tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/tv_date"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:alpha="0"
+                android:text="日期"
+                android:textColor="@android:color/white"
+                tools:alpha="1"/>
+            <Button
+                android:id="@+id/btn_expend"
+                android:layout_margin="0dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:alpha="0"
+                tools:alpha="1"
+                android:background="@drawable/ic_expand_more_white_36dp"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_daily" />
+
+    <View
+        android:id="@+id/view_bg_gray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:visibility="gone"
+        android:background="#AF000000"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

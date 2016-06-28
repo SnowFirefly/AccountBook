@@ -1,19 +1,20 @@
 package com.guangzhou.weiwong.accountbook.mvp.presenter;
 
-import android.util.Log;
-
 import com.guangzhou.weiwong.accountbook.mvp.model.IDBModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IDownloadModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IUploadModel;
-import com.guangzhou.weiwong.accountbook.mvp.model.Network;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
 import com.guangzhou.weiwong.accountbook.utils.ApiException;
+import com.guangzhou.weiwong.accountbook.utils.Const;
 import com.guangzhou.weiwong.accountbook.utils.ErrorHandler;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
+import com.guangzhou.weiwong.accountbook.utils.TimeUtil;
 import com.wong.greendao.TableRecordPersonal;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -64,10 +65,12 @@ public class MainPresenter implements IMainPresenter {
                     public void onError(Throwable e) {
                         MyLog.d(TAG, "onError():" + e.getMessage());
                         ApiException apiException = ErrorHandler.handle(e);
-                        MyLog.i(TAG, "apiException: " + apiException);
+                        MyLog.i(TAG, "apiException: " + apiException.getMessage());
                         MyLog.i(TAG, "apiException.code: " + apiException.getCode());
                         MyLog.i(TAG, "apiException.msg: " + apiException.getMsg());
-                        iView.onError(apiException.getCode() + "," + apiException.getMsg());
+//                        iView.onError(apiException.getCode() + "," + apiException.getMsg());
+                        String message = apiException.getMessage();
+                        iView.onError(message.substring(message.indexOf(":") + 1));
                     }
 
                     @Override
@@ -87,7 +90,25 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void getLocalData(Date mon, Date sun) {
         MyLog.i(this, "getLocalData(" + mon + ", " + sun + ")");
-        idbModel.addData(new TableRecordPersonal(null, 0, "detail", 11, new Date(),
-                0L, "category_name", 0L, "buyer", 0, 0, new Date()));
+        List<String> weekStrs = new ArrayList<>();
+        List<TableRecordPersonal> personals = new ArrayList<>();
+        float spend = 0, earn = 0;
+        for (int i = 1; i <= 7; i++) {
+            personals = idbModel.getDataByTimeRange(0, TimeUtil.getWeekDay(i), TimeUtil.getWeekDay(i + 1));
+            spend = 0;  earn = 0;
+            for (TableRecordPersonal personal : personals) {
+                if (personal.getKind() == Const.MONEY_KIND_SPEND) {
+                    spend += personal.getMoney();
+                } else if (personal.getKind() == Const.MONEY_KIND_EARN) {
+                    earn += personal.getMoney();
+                }
+            }
+            if (spend != 0 || earn != 0) {
+                weekStrs.add(i - 1, "\n支出 " + spend + "元" + "\n收入 " + earn + "元");
+            } else {
+                weekStrs.add(i - 1, " ");
+            }
+        }
+        iView.onLoadResult(IView.CUR_WEEK_DATA, weekStrs);
     }
 }

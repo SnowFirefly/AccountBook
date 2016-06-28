@@ -41,10 +41,11 @@ import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerLoginPresenterComponent;
 import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
 import com.guangzhou.weiwong.accountbook.mvp.model.Network;
-import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.ILoginPresenter;
 import com.guangzhou.weiwong.accountbook.utils.BlurUtil;
+import com.guangzhou.weiwong.accountbook.utils.ImageUtil;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
+import com.guangzhou.weiwong.accountbook.utils.SpUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +65,7 @@ public class LoginActivity extends BaseMvpActivity implements IView {
     @Bind(R.id.til_pw) TextInputLayout mTilPw;
     @Bind(R.id.iv_visibility) ImageView mIvVisibility;
     private boolean isVisibility = false;
+    private String userName, email, password;
 
     @Inject
     Network network;
@@ -107,6 +109,20 @@ public class LoginActivity extends BaseMvpActivity implements IView {
             }
         }, 100);
 
+        init();
+        setupListener();
+        MyLog.i(TAG, "onCreate: " + "end");
+    }
+
+    private void init() {
+        userName = SpUtil.getStringPreference(this, SpUtil.KEY_USER_NAME, "");
+        email = SpUtil.getStringPreference(this, SpUtil.KEY_USER_EMAIL, "");
+        password = SpUtil.getStringPreference(this, SpUtil.KEY_USER_PASSWORD, "");
+        mEtUser.setText(email);
+        mEtPw.setText(password);
+    }
+
+    private void setupListener() {
         mEtUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -132,15 +148,14 @@ public class LoginActivity extends BaseMvpActivity implements IView {
             public void onClick(View v) {
                 if (isVisibility) {
                     mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_white_24dp));
+                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_visibility_off_grey600_24dp));
                 } else {
                     mEtPw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_red_eye_grey600_24dp));
+                    mIvVisibility.setImageDrawable(getResources().getDrawable(R.drawable.ic_visibility_grey600_24dp));
                 }
                 isVisibility = !isVisibility;
             }
         });
-        MyLog.i(TAG, "onCreate: " + "end");
     }
 
     @Override
@@ -152,19 +167,21 @@ public class LoginActivity extends BaseMvpActivity implements IView {
     protected void onRestart() {
         super.onRestart();
         mLlLogin.setVisibility(View.VISIBLE);
+        init();
     }
 
     public void login(View view){
         iLoginPresenter.login(mEtUser.getText().toString(), mEtPw.getText().toString());
         if (checkFormat(mEtUser.getText().toString(), mEtPw.getText().toString())) {
         } else {
-//            startActivity(new Intent(this, MainActivity.class));
-//            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+
         }
         Log.d(TAG, "login()");
     }
 
     private boolean checkFormat(String userName, String password){
+//        startActivity(new Intent(this, MainActivity.class));
+//        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
             if (TextUtils.isEmpty(userName)) {
                 mTilUser.setError("邮箱不能为空");
@@ -180,6 +197,8 @@ public class LoginActivity extends BaseMvpActivity implements IView {
             mTilPw.setError("密码长度至少为6个字符");
             return false;
         }*/
+        email = userName;
+        this.password = password;
         mTilUser.setErrorEnabled(false);
         mTilPw.setErrorEnabled(false);
         return true;
@@ -210,11 +229,19 @@ public class LoginActivity extends BaseMvpActivity implements IView {
     public void onSignResult(String resultMsg) {
         Toast.makeText(this, resultMsg, Toast.LENGTH_LONG).show();
         circularBtn.setProgress(100);
+        SpUtil.putStringPreference(this, SpUtil.KEY_USER_EMAIL, email);
+        SpUtil.putStringPreference(this, SpUtil.KEY_USER_PASSWORD, password);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+            }
+        }, 500);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
             }
         }, 700);
     }
@@ -317,9 +344,11 @@ public class LoginActivity extends BaseMvpActivity implements IView {
         Bitmap newBitmap = BlurUtil.fastblur(this, bitmap, 12);
         RelativeLayout mRlLoginRoot = (RelativeLayout) findViewById(R.id.rl_login_root);
         mRlLoginRoot.setBackground(new BitmapDrawable(newBitmap));
+        MyLog.i(this, "300 dp2px: " + ImageUtil.dp2px(this, 300));
+        MyLog.i(this, "300 px2dp: " + ImageUtil.px2dp(this, 300));
 
         ViewCompat.animate(mIvSmile)
-                .translationY(-300).alpha(1)
+                .translationY(-ImageUtil.dp2px(LoginActivity.this, 150f)).alpha(1)
                 .setStartDelay(STARTUP_DELAY)
                 .setDuration(ANIM_ITEM_DURATION)
                 .setInterpolator(new DecelerateInterpolator())
@@ -352,6 +381,7 @@ public class LoginActivity extends BaseMvpActivity implements IView {
                     public void onAnimationEnd(Animation animation) {
                         mBtnRegister.setVisibility(View.INVISIBLE);
                         mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_fab_register));
+//                        mFab.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shake));
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {}

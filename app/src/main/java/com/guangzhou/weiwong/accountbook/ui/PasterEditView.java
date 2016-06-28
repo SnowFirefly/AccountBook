@@ -67,14 +67,14 @@ public class PasterEditView extends EditText {
     @Override
     protected void onDraw(Canvas canvas) {
         mGap = getHeight() / mLines;
-        Log.d(TAG, "mPadL = " + mPadL);
-        Log.d(TAG, "mPadR = " + mPadR);
-        Log.d(TAG, "mPadT = " + mPadT);
-        Log.d(TAG, "getLineHeight = " + getLineHeight());
-        Log.d(TAG, "mGap = " + mGap);
-        Log.d(TAG, "mBaseTop = " + mBaseTop);
-        Log.d(TAG, "getWidth = " + getWidth());
-        Log.d(TAG, "mLines = " + mLines);
+//        Log.d(TAG, "mPadL = " + mPadL);
+//        Log.d(TAG, "mPadR = " + mPadR);
+//        Log.d(TAG, "mPadT = " + mPadT);
+//        Log.d(TAG, "getLineHeight = " + getLineHeight());
+//        Log.d(TAG, "mGap = " + mGap);
+//        Log.d(TAG, "mBaseTop = " + mBaseTop);
+//        Log.d(TAG, "getWidth = " + getWidth());
+//        Log.d(TAG, "mLines = " + mLines);
         for (int i = 0; i <= mLines; i++) {
             canvas.drawLine(mPadL,
                     mBaseTop + mGap * i,

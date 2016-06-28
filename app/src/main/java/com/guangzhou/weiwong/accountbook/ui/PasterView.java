@@ -84,7 +84,9 @@ public class PasterView extends TextView{
 
     public void setContent(String text, Typeface typeface){
         content = text;
-        this.typeface = typeface;
+        if (typeface != null) {
+            this.typeface = typeface;
+        }
         invalidate();
     }
 }

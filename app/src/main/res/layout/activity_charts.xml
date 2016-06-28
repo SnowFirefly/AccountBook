@@ -18,7 +18,33 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+            <TextView
+                android:id="@+id/tv_title_bar"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="统计图"
+                android:textColor="@android:color/white"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                style="@android:style/TextAppearance.DeviceDefault.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="日期"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btn_expend"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="0dp"
+                android:background="@drawable/ic_expand_more_white_36dp" />
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -29,6 +55,14 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_charts" />
+
+    <View
+        android:id="@+id/view_bg_gray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:visibility="gone"
+        android:background="#AF000000"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

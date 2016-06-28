@@ -6,8 +6,6 @@ package com.guangzhou.weiwong.accountbook.utils;
  */
 
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
 
 import java.io.IOException;

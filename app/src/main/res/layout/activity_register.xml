@@ -88,7 +88,7 @@
                 android:id="@+id/iv_visibility"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_red_eye_white_24dp"/>
+                android:src="@drawable/ic_visibility_off_grey600_24dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -131,8 +131,8 @@
             android:layout_gravity="center_horizontal"
             android:textSize="20sp"
             android:textColor="@android:color/white"
-            app:cpb_textComplete="Complete"
-            app:cpb_textError="Error"
+            app:cpb_textComplete="成功"
+            app:cpb_textError="失败"
             app:cpb_textIdle="注册"
             app:cpb_selectorIdle="@drawable/idle_state_selector"
             app:cpb_selectorComplete="@drawable/complete_state_selector"

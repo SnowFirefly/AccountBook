@@ -1,8 +1,5 @@
 package com.guangzhou.weiwong.accountbook.mvp.model.Result;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 /**
  * 服务器返回结果Bean
  * Created by Tower on 2016/4/22.

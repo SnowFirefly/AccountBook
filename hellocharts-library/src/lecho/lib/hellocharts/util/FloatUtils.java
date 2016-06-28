@@ -167,6 +167,7 @@ public class FloatUtils {
         }
 
         double first = Math.ceil(start / interval) * interval;
+//        double first = 1;         // tower note
         double last = nextUp(Math.floor(stop / interval) * interval);
 
         double intervalValue;

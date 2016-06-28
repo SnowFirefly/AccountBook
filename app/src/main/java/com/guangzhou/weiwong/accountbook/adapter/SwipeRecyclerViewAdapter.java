@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.ui.RotateImageView;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by Tower on 2016/5/12.
  */
 public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
     private boolean isComplete=false;//是否完成所有数据的加载
     private FooterViewHolder footerHolder;
     private boolean isFullScreen=false;
@@ -37,7 +38,7 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i(TAG, "viewType: " + viewType);
+        MyLog.i(TAG, "viewType: " + viewType);
         switch (viewType) {
             case TYPE_FOOTER:
                 View view = LayoutInflater.from(parent.getContext())
@@ -55,15 +56,38 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        MyLog.e(this, "onBindViewHolder position: " + position + ", holder: " + holder);
         if (holder instanceof FooterViewHolder) {
             FooterViewHolder viewHolder = (FooterViewHolder) holder;
+            MyLog.e(this, "viewHolder.footer is visibility: " + viewHolder.mRivFooter.getVisibility());
+            if (isComplete) completeLoad();         // tower add
             if (viewHolder.mRivFooter.getVisibility() == View.VISIBLE
                     && !isComplete) {
                 viewHolder.mRivFooter.startRotate();
             }
         } else {
             onBindItemViewHolder(holder, position);
+
+//            MyLog.e(this, "mOnItemClickListener: " + mOnItemClickListener);
+            // 如果设置了回调，则设置点击事件
+            if (mOnItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = holder.getLayoutPosition();
+                        mOnItemClickListener.onItemClick(holder.itemView, pos);
+                    }
+                });
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int pos = holder.getLayoutPosition();
+                        mOnItemClickListener.onItemLongClick(holder.itemView, pos);
+                        return false;
+                    }
+                });
+            }
         }
     }
 
@@ -74,6 +98,7 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
+        MyLog.i(this, "getItemViewType position: " + position + ", isFullScreen: " + isFullScreen);
         if(!isFullScreen&&position + 1 == getItemCount()){//当屏幕没有占满的时候，最后一个item用空白view代替footerView
             return TYPE_NULL;
         }
@@ -104,10 +129,13 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
      * 完成所有加载
      */
     public void completeLoad(){
+        MyLog.e(this, "completeLoad");
         isComplete=true;
-        footerHolder.mRivFooter.stopRotate();
-        footerHolder.mRivFooter.setVisibility(View.GONE);
-        footerHolder.mTvFooter.setVisibility(View.VISIBLE);
+        if (footerHolder != null) {
+            footerHolder.mRivFooter.stopRotate();
+            footerHolder.mRivFooter.setVisibility(View.GONE);
+            footerHolder.mTvFooter.setVisibility(View.VISIBLE);
+        }
     }
     /**
      * 是否完成所有数据的加载
@@ -121,9 +149,12 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
      * isComplete
      */
     public void refresh() {
+        MyLog.e(this, "refresh >> footerHolder: " + footerHolder);
         isComplete = false;
-        footerHolder.mRivFooter.setVisibility(View.VISIBLE);
-        footerHolder.mTvFooter.setVisibility(View.GONE);
+        if (footerHolder != null) {
+            footerHolder.mRivFooter.setVisibility(View.VISIBLE);
+            footerHolder.mTvFooter.setVisibility(View.GONE);
+        }
     }
 
     public boolean isFullScreen() {
@@ -131,6 +162,22 @@ public abstract class SwipeRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void setIsFullScreen(boolean isFullScreen) {
+        MyLog.d(this, "setIsFullScreen: " + isFullScreen);
         this.isFullScreen = isFullScreen;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    public void initStatus() {
+        isComplete = false;
     }
 }

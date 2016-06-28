@@ -69,12 +69,13 @@
         app:cardElevation="6dp"
         android:textSize="30sp">
         <TextView
+            android:id="@+id/tv_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="30sp"
-            android:text="Text"/>
+            android:text="Tower"/>
     </android.support.v7.widget.CardView>
 
     <!--<android.support.design.widget.FloatingActionButton

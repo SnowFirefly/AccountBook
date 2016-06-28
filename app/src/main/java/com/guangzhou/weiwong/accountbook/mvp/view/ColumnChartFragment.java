@@ -1,5 +1,6 @@
 package com.guangzhou.weiwong.accountbook.mvp.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.guangzhou.weiwong.accountbook.R;
+import com.guangzhou.weiwong.accountbook.mvp.model.bean.BusData;
+import com.guangzhou.weiwong.accountbook.utils.BusProvider;
+import com.guangzhou.weiwong.accountbook.utils.Const;
+import com.guangzhou.weiwong.accountbook.utils.MyLog;
+import com.guangzhou.weiwong.accountbook.utils.TimeUtil;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +25,7 @@ import butterknife.ButterKnife;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
@@ -29,57 +37,140 @@ import lecho.lib.hellocharts.view.ColumnChartView;
  */
 public class ColumnChartFragment extends BaseFragment {
     @Bind(R.id.columnChart) ColumnChartView columnChartView;
-    ColumnChartData data;
+    private ColumnChartData columnChartData;
+    private int dateType = Const.DATE_TYPE_DAY;     // 默认单位是天
+    private float[] statisticData;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chart_column, container, false);
         ButterKnife.bind(this, view);
-        data = generateColumnChartData();
-        columnChartView.setColumnChartData(data);
-        columnChartView.setZoomType(ZoomType.HORIZONTAL);
+        dateType = ((ChartsActivity)getActivity()).getDataType();
+        statisticData = ((ChartsActivity)getActivity()).getDateData();
+        columnChartData = generateColumnChartData(statisticData.length);
+        columnChartView.setColumnChartData(columnChartData);
+        columnChartView.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
         /** Note: Chart is within ViewPager so enable container scroll mode. **/
         columnChartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         columnChartView.setValueSelectionEnabled(true);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 prepareDataAnimation();
                 columnChartView.startDataAnimation();
             }
-        }, 1000);
+        }, 500);
         return view;
     }
 
-    private ColumnChartData generateColumnChartData() {
+    private ColumnChartData generateColumnChartData(int numColumns) {
         int numSubcolumns = 1;
-        int numColumns = 32;
         // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<Column> columns = new ArrayList<Column>();
+//        List<SubcolumnValue> firstValues = new ArrayList<>();
+//        firstValues.add(new SubcolumnValue(0f, ChartUtils.pickColor()));
+//        columns.add(new Column(firstValues));
         List<SubcolumnValue> values;
-        for (int i = 1; i < numColumns; ++i) {
+        for (int i = 0; i < numColumns; ++i) {
 
             values = new ArrayList<SubcolumnValue>();
             for (int j = 0; j < numSubcolumns; ++j) {
-                values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
+                values.add(new SubcolumnValue(0, ChartUtils.pickColor()));
             }
-
-            columns.add(new Column(values));
+            Column column = new Column(values);
+            column.setHasLabels(true);
+            column.setHasLabelsOnlyForSelected(true);
+            columns.add(column);
         }
+//        List<SubcolumnValue> lastValues = new ArrayList<>();
+//        lastValues.add(new SubcolumnValue(0f, ChartUtils.pickColor()));
+//        columns.add(new Column(lastValues));
 
         ColumnChartData data = new ColumnChartData(columns);
 
-        data.setAxisXBottom(new Axis().setName("Axis X"));
-        data.setAxisYLeft(new Axis().setName("Axis Y").setHasLines(true));
+        List<AxisValue> axisValuesX = new ArrayList<>();
+        for (int i = 0; i < numColumns; i++) {
+            switch (dateType) {
+                case Const.DATE_TYPE_DAY:
+                    axisValuesX.add(new AxisValue(i).setLabel(String.valueOf(1 + i)));
+                    break;
+                case Const.DATE_TYPE_MONTH:
+                    axisValuesX.add(new AxisValue(i).setLabel(TimeUtil.months[i]));
+                    break;
+                case Const.DATE_TYPE_YEAR:
+                    axisValuesX.add(new AxisValue(i).setLabel(String.valueOf(TimeUtil.BEGIN_YEAR + i)));
+                    break;
+            }
+        }
+        switch (dateType) {
+            case Const.DATE_TYPE_DAY:
+                data.setAxisXBottom(new Axis().setName("日期单位：天").setValues(axisValuesX).setAutoGenerated(false));
+                break;
+            case Const.DATE_TYPE_MONTH:
+                data.setAxisXBottom(new Axis().setName("日期单位：月").setValues(axisValuesX).setAutoGenerated(false));
+                break;
+            case Const.DATE_TYPE_YEAR:
+                data.setAxisXBottom(new Axis().setName("日期单位：年").setValues(axisValuesX).setAutoGenerated(false));
+                break;
+        }
+        data.setAxisYLeft(new Axis().setName("金额单位：元").setHasLines(true).setAutoGenerated(true));
         return data;
     }
 
     private void prepareDataAnimation() {
-        for (Column column : data.getColumns()) {
+        MyLog.i(this, "columns: " + columnChartData.getColumns().size());
+        MyLog.i(this, "statisticData: " + statisticData.length);
+        for (int i = 0; i < (statisticData.length ); i++) {
+            Column column = columnChartData.getColumns().get(i);
             for (SubcolumnValue value : column.getValues()) {
-                value.setTarget((float) Math.random() * 100);
+                /*if (i == 0 || i == (statisticData.length + 1)) {
+                    value.setTarget(0);
+                    break;
+                } else*/ {
+                    value.setTarget(statisticData[i]);
+//                    MyLog.i(this, "value: " + statisticData[i]);
+                }
             }
         }
+    }
+
+    @Subscribe
+    public void receiveData(BusData busData) {
+        MyLog.i(this, "dateType: " + dateType);
+        MyLog.i(this, "receiveData =>> " + busData.toString());
+        if (columnChartData == null || columnChartView == null) return;
+        if (busData.getDataType() != Const.DATA_TYPE_CATE) {
+            statisticData = busData.getData();
+            if (dateType != busData.getDataType()) {        // 显示单位变了则需重新设置列数
+                dateType = busData.getDataType();
+                columnChartData = generateColumnChartData(statisticData.length);
+                columnChartView.setColumnChartData(columnChartData);
+            } else {
+                dateType = busData.getDataType();
+            }
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (columnChartData == null) return;
+                    prepareDataAnimation();
+                    columnChartView.startDataAnimation();
+                }
+            }, 500);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        BusProvider.getBusInstance().register(this);
+        MyLog.e(this, "bus: " + BusProvider.getBusInstance());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getBusInstance().unregister(this);
     }
 }

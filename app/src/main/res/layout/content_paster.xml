@@ -50,6 +50,7 @@
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="25sp" />
             <EditText
+                android:id="@+id/et_money"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:inputType="numberDecimal"/>
@@ -105,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="消费类型"
+                android:text="消费种类"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 />
@@ -132,16 +133,16 @@
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="电子产品"
+                        android:text="日用品"
                         android:textColor="@color/colorAccent"
-                        android:id="@+id/rb_cate_digital"
+                        android:id="@+id/rb_cate_daily"
                         />
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="日用品"
+                        android:text="电子产品"
                         android:textColor="@color/colorAccent"
-                        android:id="@+id/rb_cate_daily"
+                        android:id="@+id/rb_cate_digital"
                         />
                     <RadioButton
                         android:layout_width="wrap_content"
