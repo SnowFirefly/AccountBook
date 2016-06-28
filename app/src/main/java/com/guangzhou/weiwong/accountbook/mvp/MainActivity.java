@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bugtags.library.Bugtags;
 import com.bugtags.library.core.ui.rounded.CircleImageView;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
@@ -105,6 +106,9 @@ public class MainActivity extends BaseMvpActivity
         myHandler.sendEmptyMessageDelayed(5, 1800);
         myHandler.sendEmptyMessageDelayed(6, 2500);
         myHandler.sendEmptyMessageDelayed(7, 3000);
+
+        MyLog.i(this, "invocation: " + Bugtags.currentInvocationEvent());
+        Bugtags.setInvocationEvent(Bugtags.BTGInvocationEventShake);
     }
 
     private void init() {
