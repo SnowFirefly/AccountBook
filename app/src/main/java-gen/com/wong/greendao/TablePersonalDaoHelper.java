@@ -87,6 +87,7 @@ public class TablePersonalDaoHelper implements MyDaoHelperInterface {
             QueryBuilder.LOG_SQL = true;
             QueryBuilder.LOG_VALUES = true;
         } else {
+            query = query.forCurrentThread();       // 在多线程中使用查询，必须调用query.forCurrentThread()为当前线程获得一个query对象的thread-local实例
             query.setParameter(0, begin);
             query.setParameter(1, end);
         }

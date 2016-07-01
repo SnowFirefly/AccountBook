@@ -17,6 +17,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Tower on 2016/6/4.
@@ -27,13 +37,14 @@ public class DailyPresenter implements IDailyPresenter {
     private IDBModel idbModel;
     private IView iView;
     private SimpleDateFormat sdf;
+    private Subscription subscription;
 
     public DailyPresenter(IUploadModel iUploadModel, IDownloadModel iDownloadModel, IDBModel idbModel) {
         this.iUploadModel = iUploadModel;
         this.idbModel = idbModel;
         this.iDownloadModel = iDownloadModel;
         idbModel.init(IDBModel.TABLE_PERSONAL);
-        sdf = new SimpleDateFormat("yyyy/MM/dd");
+        sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     }
 
     @Override
@@ -46,15 +57,42 @@ public class DailyPresenter implements IDailyPresenter {
         idbModel.deleteData(MyDaoHelperInterface.ID_TABLE, tableId);
     }
 
-    private void getLocal(long groupId, Date begin, Date end) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        MyLog.i(this, "from: " + sdf.format(begin) + ", to: " + sdf.format(end));
-        List<TableRecordPersonal> personals = idbModel.getDataByTimeRange(groupId, begin, end);
+    private void getLocal(final long groupId, final Date begin, final Date end) {
+        MyLog.i(this, "from: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(begin)
+                + ", to: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(end));
+        /*List<TableRecordPersonal> personals = idbModel.getDataByTimeRange(groupId, begin, end);
         List<DailyItem> items = new ArrayList<>();
         for (int i = 0; i < personals.size(); i++) {
             items.add(table2Item(personals.get(i)));
         }
-        iView.onLoadResult(IView.DAILY_DATA, items);
+        iView.onLoadResult(IView.DAILY_DATA, items);*/
+
+        Observable<List<TableRecordPersonal>> observable = Observable.create(new Observable.OnSubscribe<List<TableRecordPersonal>>() {
+            @Override
+            public void call(Subscriber<? super List<TableRecordPersonal>> subscriber) {
+                List<TableRecordPersonal> personals = idbModel.getDataByTimeRange(groupId, begin, end);
+                subscriber.onNext(personals);
+                subscriber.onCompleted();
+            }
+        });
+        subscription = observable.subscribeOn(Schedulers.io())
+                .map(new Func1<List<TableRecordPersonal>, List<DailyItem>>() {
+                    @Override
+                    public List<DailyItem> call(List<TableRecordPersonal> tableRecordPersonals) {
+                        List<DailyItem> dailyItems = new ArrayList<>();
+                        for (int i = 0; i < tableRecordPersonals.size(); i++) {
+                            dailyItems.add(table2Item(tableRecordPersonals.get(i)));
+                        }
+                        return dailyItems;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<DailyItem>>() {
+                    @Override
+                    public void call(List<DailyItem> dailyItems) {
+                        iView.onLoadResult(IView.DAILY_DATA, dailyItems);
+                    }
+                });
     }
 
     private void getCloudData() {
@@ -72,7 +110,7 @@ public class DailyPresenter implements IDailyPresenter {
         return item;
     }
 
-    public TableRecordPersonal getOneTableRecord(long tableId) {
+    public TableRecordPersonal getOneTableRecord(final long tableId) {
         return idbModel.getDataById(tableId);
     }
 
@@ -83,6 +121,8 @@ public class DailyPresenter implements IDailyPresenter {
 
     @Override
     public void onDetach() {
-
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
     }
 }

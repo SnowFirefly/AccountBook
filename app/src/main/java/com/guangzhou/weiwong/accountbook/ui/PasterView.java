@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.guangzhou.weiwong.accountbook.utils.ImageUtil;
+
 /**
  * Created by Tower on 2016/4/28.
  */
@@ -18,19 +20,24 @@ public class PasterView extends TextView{
     private String content = "";
     private int mHeight, mWidth, mPadL, mPadR, mPadT, mPadB;
     private Typeface typeface;
+    private int textSize = 18;
+    private Context mContext;
 
     public PasterView(Context context) {
         super(context);
+        mContext = context;
 //        init();
     }
 
     public PasterView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
 //        init();
     }
 
     public PasterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
 //        init();
     }
 
@@ -44,7 +51,7 @@ public class PasterView extends TextView{
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(getCurrentTextColor());
-        mPaint.setTextSize(35);
+        mPaint.setTextSize(ImageUtil.dp2px(mContext, textSize));
         if (typeface != null)
             mPaint.setTypeface(typeface);
     }

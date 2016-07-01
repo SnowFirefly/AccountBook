@@ -4,6 +4,7 @@ import com.guangzhou.weiwong.accountbook.mvp.model.IDBModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IDownloadModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IUploadModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.Result.Result;
+import com.guangzhou.weiwong.accountbook.mvp.model.bean.BusData;
 import com.guangzhou.weiwong.accountbook.mvp.view.IView;
 import com.guangzhou.weiwong.accountbook.utils.ApiException;
 import com.guangzhou.weiwong.accountbook.utils.Const;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -31,6 +33,7 @@ public class MainPresenter implements IMainPresenter {
     private IUploadModel iUploadModel;
     private IDownloadModel iDownloadModel;
     private IDBModel idbModel;
+    private Subscription subscription;
 
     @Override
     public void onAttach(IView iView) {
@@ -90,25 +93,69 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void getLocalData(Date mon, Date sun) {
         MyLog.i(this, "getLocalData(" + mon + ", " + sun + ")");
-        List<String> weekStrs = new ArrayList<>();
-        List<TableRecordPersonal> personals = new ArrayList<>();
-        float spend = 0, earn = 0;
-        for (int i = 1; i <= 7; i++) {
-            personals = idbModel.getDataByTimeRange(0, TimeUtil.getWeekDay(i), TimeUtil.getWeekDay(i + 1));
-            spend = 0;  earn = 0;
-            for (TableRecordPersonal personal : personals) {
-                if (personal.getKind() == Const.MONEY_KIND_SPEND) {
-                    spend += personal.getMoney();
-                } else if (personal.getKind() == Const.MONEY_KIND_EARN) {
-                    earn += personal.getMoney();
+//        List<String> weekStrs = new ArrayList<>();
+//        List<TableRecordPersonal> personals = new ArrayList<>();
+//        float spend = 0, earn = 0;
+//        for (int i = 1; i <= 7; i++) {
+//            personals = idbModel.getDataByTimeRange(0, TimeUtil.getWeekDay(i), TimeUtil.getWeekDay(i + 1));
+//            spend = 0;  earn = 0;
+//            for (TableRecordPersonal personal : personals) {
+//                if (personal.getKind() == Const.MONEY_KIND_SPEND) {
+//                    spend += personal.getMoney();
+//                } else if (personal.getKind() == Const.MONEY_KIND_EARN) {
+//                    earn += personal.getMoney();
+//                }
+//            }
+//            if (spend != 0 || earn != 0) {
+//                weekStrs.add(i - 1, "\n支出 " + spend + "元" + "\n收入 " + earn + "元");
+//            } else {
+//                weekStrs.add(i - 1, " ");
+//            }
+//        }
+//        iView.onLoadResult(IView.CUR_WEEK_DATA, weekStrs);
+
+        Observable<List<String>> observable = Observable.create(new Observable.OnSubscribe<List<String>>() {
+            @Override
+            public void call(Subscriber<? super List<String>> subscriber) {
+                List<String> weekStrs = new ArrayList<>();
+                float spend = 0, earn = 0;
+                for (int i = 1; i <= 7; i++) {
+                    List<TableRecordPersonal> personals = idbModel.getDataByTimeRange(0, TimeUtil.getWeekDay(i), TimeUtil.getWeekDay(i + 1));
+                    spend = 0;  earn = 0;
+                    for (TableRecordPersonal personal : personals) {
+                        if (personal.getKind() == Const.MONEY_KIND_SPEND) {
+                            spend += personal.getMoney();
+                        } else if (personal.getKind() == Const.MONEY_KIND_EARN) {
+                            earn += personal.getMoney();
+                        }
+                    }
+                    if (spend != 0 || earn != 0) {
+                        weekStrs.add(i - 1, "\n支出 " + spend + "元" + "\n收入 " + earn + "元");
+                    } else {
+                        weekStrs.add(i - 1, " ");
+                    }
                 }
+                subscriber.onNext(weekStrs);
             }
-            if (spend != 0 || earn != 0) {
-                weekStrs.add(i - 1, "\n支出 " + spend + "元" + "\n收入 " + earn + "元");
-            } else {
-                weekStrs.add(i - 1, " ");
-            }
-        }
-        iView.onLoadResult(IView.CUR_WEEK_DATA, weekStrs);
+        });
+        subscription = observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<String>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        MyLog.e(this, e.getMessage());
+                        MyLog.e(this, e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<String> weekStrs) {
+                        iView.onLoadResult(IView.CUR_WEEK_DATA, weekStrs);
+                    }
+                });
     }
 }

@@ -1,7 +1,6 @@
 package com.guangzhou.weiwong.accountbook.mvp;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,15 +21,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewStub;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugtags.library.Bugtags;
 import com.bugtags.library.core.ui.rounded.CircleImageView;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerMainPresenterComponent;
@@ -44,7 +41,6 @@ import com.guangzhou.weiwong.accountbook.mvp.view.ProfileActivity;
 import com.guangzhou.weiwong.accountbook.mvp.view.SettleActivity;
 import com.guangzhou.weiwong.accountbook.ui.PasterView;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.guangzhou.weiwong.accountbook.utils.DialogUtil;
 import com.guangzhou.weiwong.accountbook.utils.MyLog;
 import com.guangzhou.weiwong.accountbook.utils.SpUtil;
@@ -113,13 +109,6 @@ public class MainActivity extends BaseMvpActivity
 
     private void init() {
         setSupportActionBar(toolbar);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                requestData();
-            }
-        });
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -165,6 +154,22 @@ public class MainActivity extends BaseMvpActivity
         }
     }
 
+    private void setupListener() {
+        mPvMon.setOnClickListener(weekClickListener);
+        mPvTue.setOnClickListener(weekClickListener);
+        mPvWed.setOnClickListener(weekClickListener);
+        mPvThu.setOnClickListener(weekClickListener);
+        mPvFri.setOnClickListener(weekClickListener);
+        mPvSat.setOnClickListener(weekClickListener);
+        mPvSun.setOnClickListener(weekClickListener);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestData();
+            }
+        });
+    }
+
     private void requestData() {
         WindowUtil.showPopupWindow(MainActivity.this);
         iMainPresenter.getGroupData();
@@ -178,12 +183,12 @@ public class MainActivity extends BaseMvpActivity
         private WeakReference<MainActivity> mActivity;
 
         public MyHandler(MainActivity mActivity) {
-            this.mActivity = new WeakReference<MainActivity>(mActivity);
+            this.mActivity = new WeakReference<>(mActivity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainActivity mainActivity = mActivity.get();
+            final MainActivity mainActivity = mActivity.get();
             Log.d(mainActivity.TAG, "mHandler:" + msg.what);
             switch (msg.what){
                 case 1:
@@ -230,13 +235,12 @@ public class MainActivity extends BaseMvpActivity
                     mainActivity.myHandler.sendEmptyMessageDelayed(8, 1000);
                     break;
                 case 8:
-                    mainActivity.mPvMon.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvTue.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvWed.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvThu.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvFri.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvSat.setOnClickListener(mainActivity.weekClickListener);
-                    mainActivity.mPvSun.setOnClickListener(mainActivity.weekClickListener);
+                    ViewCompat.animate(mainActivity.fab)
+                            .scaleY(1).scaleX(1)
+                            .setStartDelay(0)
+                            .setDuration(500)
+                            .setInterpolator(new DecelerateInterpolator());
+                    mainActivity.setupListener();
                     mainActivity.requestData();         // 请求数据
                     break;
                 default:    break;
@@ -266,7 +270,7 @@ public class MainActivity extends BaseMvpActivity
             WindowUtil.hidePopupWindow();
             return;
         }
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             DialogUtil.dialogShow(this, DialogUtil.FLIPH, "退出共享账本？", new DialogUtil.DialogClickListener() {
@@ -336,7 +340,7 @@ public class MainActivity extends BaseMvpActivity
             Toast.makeText(this, "敬请期待！", Toast.LENGTH_LONG).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

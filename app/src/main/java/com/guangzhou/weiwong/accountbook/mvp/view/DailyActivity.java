@@ -468,5 +468,6 @@ public class DailyActivity extends BaseMvpActivity implements IView, SwipeRecycl
     protected void onDestroy() {
         super.onDestroy();
         BusProvider.getBusInstance().unregister(this);
+        iDailyPresenter.onDetach();
     }
 }

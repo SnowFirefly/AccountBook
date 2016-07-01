@@ -2,20 +2,16 @@ package com.guangzhou.weiwong.accountbook.mvp.view;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.app.Fragment;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -86,7 +82,7 @@ public class ChartsActivity extends BaseMvpActivity implements IView {
         setContentView(R.layout.activity_charts);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = new ListView(this);
         listView.setBackgroundColor(getResources().getColor(R.color.colorBgListView));
@@ -118,9 +114,9 @@ public class ChartsActivity extends BaseMvpActivity implements IView {
         yearStr = TimeUtil.getYearStrList();
         years = TimeUtil.getYearList();
         if (dataType == Const.DATE_TYPE_MONTH) {
-            arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, yearStr);
+            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, yearStr);
         } else {
-            arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, monthStr);
+            arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, monthStr);
         }
         listView.setAdapter(arrayAdapter);
     }
@@ -398,8 +394,7 @@ public class ChartsActivity extends BaseMvpActivity implements IView {
         int resourceId = resources.getIdentifier("navigation_bar_height",
                 "dimen", "android");
         //获取NavigationBar的高度
-        int height = resources.getDimensionPixelSize(resourceId);
-        return height;
+        return resources.getDimensionPixelSize(resourceId);
     }
 
     public int getDataType() {
@@ -412,5 +407,11 @@ public class ChartsActivity extends BaseMvpActivity implements IView {
 
     public float[] getCateData() {
         return cateData;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        iChartPresenter.onDetach();
     }
 }

@@ -84,7 +84,6 @@ public class LoginPresenter implements ILoginPresenter {
                         MyLog.d(TAG, "onNext()");
                         MyLog.i(TAG, result.toString());
 //                        User user = (User) result.getData();        // convert fail
-
                         iView.onSignResult(result.toString());
 
                         String newStr = result.getData().toString().replace("null", "unknown");
