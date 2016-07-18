@@ -1,5 +1,6 @@
 package com.guangzhou.weiwong.accountbook.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -60,12 +61,62 @@ public class DialogUtil {
                 .withEffect(effect)                                         //def Effectstype.Slidetop
                 .withButton1Text("确定")                                      //def gone
                 .withButton2Text("取消")                                  //def gone
-//                .setCustomView(R.layout.custom_view, this)         //.setCustomView(View or ResId,context)
+//                .setCustomView(R.layout., this)         //.setCustomView(View or ResId,context)
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialogBuilder.dismiss();
                         listener.onClick(v);
+                    }
+                })
+                .setButton2Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public static void dialogShow(final Context context, String stype, String msg, View view, final DialogClickListener listener){
+        switch (stype) {
+            case "Fadein": effect= Effectstype.Fadein;break;
+            case "Slideright": effect=Effectstype.Slideright;break;
+            case "Slideleft": effect=Effectstype.Slideleft;break;
+            case "Slidetop": effect=Effectstype.Slidetop;break;
+            case "SlideBottom": effect=Effectstype.SlideBottom;break;
+            case "Newspager": effect=Effectstype.Newspager;break;
+            case "Fall": effect=Effectstype.Fall;break;
+            case "Sidefill": effect=Effectstype.Sidefill;break;
+            case "Fliph": effect=Effectstype.Fliph;break;
+            case "Flipv": effect=Effectstype.Flipv;break;
+            case "RotateBottom": effect=Effectstype.RotateBottom;break;
+            case "RotateLeft": effect=Effectstype.RotateLeft;break;
+            case "Slit": effect=Effectstype.Slit;break;
+            case "Shake": effect=Effectstype.Shake;break;
+            default:  stype = "Fadein"; effect=Effectstype.Fadein; break;
+        }
+
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+        dialogBuilder
+                .withTitle(null)                                  //.withTitle(null)  no title "Modal Dialog"
+                .withTitleColor("#000000")                                  //def
+                .withDividerColor("#11000000")                              //def
+                .withMessage(null)                     //.withMessage(null)  no Msg
+                .withMessageColor("#000000")                              //def  | withMessageColor(int resid)
+                .withDialogColor("#FFFFFF")                               //def  | withDialogColor(int resid)                               //def
+                .withIcon(context.getResources().getDrawable(R.drawable.ic_launcher_m))
+                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+                .withDuration(400)                                          //def 700
+                .withEffect(effect)                                         //def Effectstype.Slidetop
+                .withButton1Text("确定")                                      //def gone
+                .withButton2Text("取消")                                  //def gone
+                .setCustomView(view, context)         //.setCustomView(View or ResId,context)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onClick(v);
+                        dialogBuilder.dismiss();
                     }
                 })
                 .setButton2Click(new View.OnClickListener() {

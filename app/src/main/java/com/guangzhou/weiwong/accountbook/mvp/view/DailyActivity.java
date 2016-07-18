@@ -24,6 +24,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ import com.guangzhou.weiwong.accountbook.adapter.SwipeRecyclerViewAdapter;
 import com.guangzhou.weiwong.accountbook.animators.ItemAnimatorFactory;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerDailyPresenterComponent;
+import com.guangzhou.weiwong.accountbook.mvp.MainActivity;
 import com.guangzhou.weiwong.accountbook.mvp.model.IDBModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IDownloadModel;
 import com.guangzhou.weiwong.accountbook.mvp.model.IUploadModel;
@@ -62,6 +65,7 @@ import com.guangzhou.weiwong.accountbook.utils.WindowUtil;
 import com.squareup.otto.Produce;
 import com.wong.greendao.TableRecordPersonal;
 
+import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -408,6 +412,8 @@ public class DailyActivity extends BaseMvpActivity implements IView, SwipeRecycl
         MyLog.i(this, "type: " + type);
         if (type == IView.DAILY_DATA) {
             items = (List<DailyItem>) bean;
+        } else if (type == IView.ALL_DATA) {
+            Snackbar.make(mFab, (CharSequence) bean, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -462,6 +468,29 @@ public class DailyActivity extends BaseMvpActivity implements IView, SwipeRecycl
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            iDailyPresenter.saveToSDCard();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

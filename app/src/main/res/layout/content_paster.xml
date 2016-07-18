@@ -13,6 +13,9 @@
         android:id="@+id/rl_root"
         android:background="@drawable/bg_act_paster"
         >
+<!--
+        android:background="@drawable/bg_act_paster"
+-->
         <com.guangzhou.weiwong.accountbook.ui.PasterEditView
             android:id="@+id/pev_note"
             android:layout_width="match_parent"

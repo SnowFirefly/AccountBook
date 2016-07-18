@@ -99,7 +99,6 @@ public class PasterActivity extends BaseMvpActivity implements IView {
     private ArrayAdapter<String> arrayAdapter;
 
     @Bind(R.id.view_bg_gray) View mViewBg;
-    @Bind(R.id.rl_root) RelativeLayout mRlRoot;
     private PopupWindow popupWindow;
     private DatePicker mDatePicker;
 
@@ -107,7 +106,7 @@ public class PasterActivity extends BaseMvpActivity implements IView {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.tv_date) TextView mTvDate;
     @Bind(R.id.btn_expend) Button mBtnExpend;
-    private PasterEditView mPevNote;        // 若用注解效率会降低，导致阻塞?
+    private PasterEditView mPevNote;
     private FloatingActionButton mFab;
     private PasterHandler pasterHandler;
 
@@ -127,18 +126,29 @@ public class PasterActivity extends BaseMvpActivity implements IView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: " + "start");
+        MyLog.i(TAG, "onCreate: " + "start");
+        MyLog.e(TAG, "usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
         setContentView(R.layout.activity_paster);
+        MyLog.i(TAG, "onCreate: " + "after setContentView");
         ButterKnife.bind(this);
-        Log.i(TAG, "onCreate: " + "after bind");
+        MyLog.i(TAG, "onCreate: " + "after bind");
+        MyLog.e(TAG, "usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        MyLog.i(TAG, "onCreate: " + "init begin");
         init();
+        MyLog.i(TAG, "onCreate: " + "init end");
         setupListener();
         if (weekDay != -1) {
-            iPasterPresenter.getOneDayData(date);
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iPasterPresenter.getOneDayData(date);
+                }
+            }, 500);
         }
-        Log.i(TAG, "onCreate: " + "end");
+        MyLog.i(TAG, "onCreate: " + "end");
+        MyLog.e(TAG, "usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
     }
 
     @Subscribe
@@ -299,6 +309,7 @@ public class PasterActivity extends BaseMvpActivity implements IView {
         @Override
         public void handleMessage(Message msg) {
             PasterActivity pasterActivity = mActivity.get();
+            if (pasterActivity.isDestroyed()) return;
             switch (msg.what) {
                 case ACTION_CLOSE_WINDOW:
                     if (pasterActivity.popupWindow.isShowing()) {
@@ -363,7 +374,6 @@ public class PasterActivity extends BaseMvpActivity implements IView {
 
     public void onShowPopup(View view){
 //        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);    // 隐藏底部导航栏
-
 //        View view = View.inflate(this, R.layout.item_list_card_settle, null);
 
         // 最后一个参数false 代表：不与其余布局发生交互， true代表：可以与其余布局发生交互事件
@@ -394,7 +404,7 @@ public class PasterActivity extends BaseMvpActivity implements IView {
         mViewBg.setVisibility(View.VISIBLE);
         mViewBg.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bg_gray_enter));
         // 依附的父布局自己设定，我这里为了方便，这样写的。
-        popupWindow.showAtLocation(mPevNote, Gravity.BOTTOM, 0, getNavigationBarHeight(this));
+        popupWindow.showAtLocation(mFab, Gravity.BOTTOM, 0, getNavigationBarHeight(this));
 
         Log.i(TAG, "NavigationBarHeight: " + getNavigationBarHeight(this));
         Log.i(TAG, "hasNavigationBar: " + checkDeviceHasNavigationBar(this));
@@ -488,6 +498,12 @@ public class PasterActivity extends BaseMvpActivity implements IView {
     protected void onStart() {
         super.onStart();
         BusProvider.getBusInstance().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        MyLog.d(this, "onResume");
+        super.onResume();
     }
 
     @Override

@@ -11,6 +11,7 @@ public interface IView {
     int STATISTIC_DATA = 4;
     int PERSONAL_DATA = 5;
     int TIME_RANGE = 6;
+    int ALL_DATA = 7;
 
     void onSignResult(String resultMsg);        // 登录注册结果
 

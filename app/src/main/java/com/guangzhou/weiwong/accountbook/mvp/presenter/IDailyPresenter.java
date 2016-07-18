@@ -11,4 +11,6 @@ public interface IDailyPresenter extends IPresenter {
     <T> T getOneTableRecord(long tableId);
 
     void deleteOneRecord(long tableId);
+
+    void saveToSDCard();
 }

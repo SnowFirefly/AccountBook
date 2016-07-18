@@ -9,7 +9,6 @@ import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,18 +54,9 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         setContentView(R.layout.activity_settle);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         mSwipeRefreshLayout.setColorSchemeResources(R.color.color1, R.color.color2,
                 R.color.color3, R.color.color4);
@@ -228,13 +218,4 @@ public class SettleActivity extends BaseMvpActivity implements SwipeRecyclerView
         showToolbar();
     }
 
-/*    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    */
 }

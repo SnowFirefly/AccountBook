@@ -1,5 +1,7 @@
 package com.guangzhou.weiwong.accountbook.mvp;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,25 +32,12 @@ import com.guangzhou.weiwong.accountbook.R;
 import com.guangzhou.weiwong.accountbook.dagger2.component.AppComponent;
 import com.guangzhou.weiwong.accountbook.dagger2.component.DaggerMainPresenterComponent;
 import com.guangzhou.weiwong.accountbook.mvp.presenter.IMainPresenter;
-import com.guangzhou.weiwong.accountbook.mvp.view.BaseMvpActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.ChartsActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.DailyActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.GroupActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.IView;
-import com.guangzhou.weiwong.accountbook.mvp.view.PasterActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.ProfileActivity;
-import com.guangzhou.weiwong.accountbook.mvp.view.SettleActivity;
+import com.guangzhou.weiwong.accountbook.mvp.view.*;
 import com.guangzhou.weiwong.accountbook.ui.PasterView;
 
-import com.guangzhou.weiwong.accountbook.utils.DialogUtil;
-import com.guangzhou.weiwong.accountbook.utils.MyLog;
-import com.guangzhou.weiwong.accountbook.utils.SpUtil;
-import com.guangzhou.weiwong.accountbook.utils.TimeUtil;
-import com.guangzhou.weiwong.accountbook.utils.WindowUtil;
+import com.guangzhou.weiwong.accountbook.utils.*;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -88,9 +76,10 @@ public class MainActivity extends BaseMvpActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyLog.e(TAG, "onCreate start usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        MyLog.e(TAG, "onCreate after bind usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
         init();
         createMenu();
         weekClickListener = new WeekClickListener();
@@ -105,6 +94,10 @@ public class MainActivity extends BaseMvpActivity
 
         MyLog.i(this, "invocation: " + Bugtags.currentInvocationEvent());
         Bugtags.setInvocationEvent(Bugtags.BTGInvocationEventShake);
+        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        int heapSize = manager.getMemoryClass();
+        MyLog.i(TAG, "heapSize: " + heapSize + "MB");
+        MyLog.e(TAG, "onCreate end usedMemory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
     }
 
     private void init() {
@@ -249,11 +242,6 @@ public class MainActivity extends BaseMvpActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onStop() {
         MyLog.d(this, "onStop");
         if (WindowUtil.isShown()) {
@@ -283,12 +271,6 @@ public class MainActivity extends BaseMvpActivity
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        MyLog.i(this, "onKeyDown: keyCode = " + keyCode);
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -304,7 +286,7 @@ public class MainActivity extends BaseMvpActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            WindowUtil.showPopupWindow(MainActivity.this);
+//            WindowUtil.showPopupWindow(MainActivity.this);
             return true;
         }
 

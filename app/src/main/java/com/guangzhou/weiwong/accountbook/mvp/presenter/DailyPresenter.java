@@ -13,6 +13,8 @@ import com.guangzhou.weiwong.accountbook.utils.TimeUtil;
 import com.wong.greendao.MyDaoHelperInterface;
 import com.wong.greendao.TableRecordPersonal;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,6 +114,40 @@ public class DailyPresenter implements IDailyPresenter {
 
     public TableRecordPersonal getOneTableRecord(final long tableId) {
         return idbModel.getDataById(tableId);
+    }
+
+    public void saveToSDCard() {
+        List<TableRecordPersonal> personals = idbModel.getAllData();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        StringBuilder sb = new StringBuilder();
+        for (TableRecordPersonal personal : personals) {
+            sb.append("id:").append(personal.getId()).append(", ")
+                    .append("cloud_id:").append(personal.getCloud_id()).append(", ")
+                    .append("detail:").append(personal.getDetail()).append(", ")
+                    .append("money:").append(personal.getMoney()).append(", ")
+                    .append("buy_time:").append(sdf.format(personal.getBuy_time())).append(", ")
+                    .append("category_id:").append(personal.getCategory_id()).append(", ")
+                    .append("category_name:").append(personal.getCategory_name()).append(", ")
+                    .append("buyer_id:").append(personal.getBuyer_id()).append(", ")
+                    .append("buyer:").append(personal.getBuyer()).append(", ")
+                    .append("kind:").append(personal.getKind()).append(", ")
+                    .append("state").append(personal.getState()).append("\n");
+        }
+        try {
+            File dir = new File(android.os.Environment.getExternalStorageDirectory()
+                    + "/AccountBook");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            FileOutputStream fos = new FileOutputStream(android.os.Environment.getExternalStorageDirectory()
+                    + "/AccountBook/db_backup.txt");
+            fos.write(sb.toString().getBytes());
+            fos.close();
+            iView.onLoadResult(IView.ALL_DATA, "数据已保存在SDcard：" + android.os.Environment.getExternalStorageDirectory()
+                    + "/AccountBook/db_backup.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -18,13 +18,14 @@ import com.romainpiel.shimmer.ShimmerTextView;
 import com.wong.greendao.DBHelper;
 
 public class SplashActivity extends AppCompatActivity {
+    private Shimmer shimmer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ShimmerTextView shimmerTextView = (ShimmerTextView) findViewById(R.id.tv_shimmer);
-        final Shimmer shimmer = new Shimmer();
+        shimmer = new Shimmer();
         shimmer.start(shimmerTextView);
         /*mShimmer.setRepeatCount(0)
                 .setDuration(500)
@@ -46,6 +47,9 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                 shimmer.cancel();
+                shimmer = null;
+//                System.gc();
+//                Runtime.getRuntime().gc();
                 finish();
                 Log.i("SplashActivity", "startActivity");
             }
@@ -57,4 +61,5 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 1000);
     }
+
 }

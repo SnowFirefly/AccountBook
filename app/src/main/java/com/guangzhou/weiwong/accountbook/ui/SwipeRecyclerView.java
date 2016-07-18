@@ -133,10 +133,6 @@ public class SwipeRecyclerView extends RecyclerView implements SwipeRefreshLayou
 
     }
 
-    public void initData() {
-        lastVisibleItem = 0;
-    }
-
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
@@ -167,7 +163,6 @@ public class SwipeRecyclerView extends RecyclerView implements SwipeRefreshLayou
     }
 
     public static abstract class HidingScrollListener extends RecyclerView.OnScrollListener {
-
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
